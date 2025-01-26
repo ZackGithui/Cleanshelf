@@ -1,4 +1,7 @@
 package com.example.cleanshelf.presentation.authentication.signIn
 
-class SignInState {
-}
+data class SignInState(
+    val email: String = "",
+    val password: String = "",
+    var viewPassword: Boolean = false
+)
