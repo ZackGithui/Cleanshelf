@@ -1,4 +1,4 @@
-package com.example.cleanshelf.presentation.authentication
+package com.example.cleanshelf.presentation.authentication.signIn
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
