@@ -23,7 +23,7 @@ import androidx.compose.ui.unit.sp
 fun CleanShelfTextField(
     modifier: Modifier = Modifier,
     value: String = "",
-    onValueChange: (String) -> Unit,
+    onValueChange: (String) -> Unit = {},
     placeholder: String = "",
     color: TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.primary
@@ -61,8 +61,9 @@ fun CleanShelfPasswordTextField(
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.primary
     ),
+    //textColor: Color
 
-    ) {
+) {
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
@@ -79,7 +80,7 @@ fun CleanShelfPasswordTextField(
         },
 
         trailingIcon = {
-            IconButton(onClick = onTrailingIconClicked) {
+            IconButton(onClick =  onTrailingIconClicked ) {
                 Icon(
                     imageVector = if (isPasswordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
                     contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
@@ -88,10 +89,10 @@ fun CleanShelfPasswordTextField(
             }
         },
         shape = MaterialTheme.shapes.large,
-        colors = colors
+        colors = colors,
 
 
-    )
+        )
 
 
 }
