@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "657198738019",
+    "project_id": "cleanshelf-59ad9",
+    "storage_bucket": "cleanshelf-59ad9.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:657198738019:android:9f869c90affca27cbea656",
+        "android_client_info": {
+          "package_name": "com.example.cleanshelf"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCjfkdZPnGrLz_k9SpyM94-xKKsqYWODqc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
