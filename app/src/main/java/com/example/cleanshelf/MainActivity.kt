@@ -4,9 +4,10 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.lifecycle.viewmodel.compose.viewModel
+
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotPasswordScreen
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotViewModel
+
 import com.example.cleanshelf.ui.theme.CleanshelfTheme
 
 
@@ -16,8 +17,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CleanshelfTheme {
-                ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>())
-
+                ForgotPasswordScreen(viewModel = ForgotViewModel())
 
             }
         }
