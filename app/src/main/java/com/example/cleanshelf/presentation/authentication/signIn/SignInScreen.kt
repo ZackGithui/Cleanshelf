@@ -55,7 +55,7 @@ fun Login(
             value = signState.password,
             onValueChange = { viewModel.uiEvents(SignInEvents.PasswordChanged(it)) },
             placeholder = "Password",
-            onTrailingIconClicked = { viewModel.uiEvents(SignInEvents.ViewPassword)},
+            onTrailingIconClicked = { viewModel.uiEvents(SignInEvents.ViewPassword) },
             isPasswordVisible = signState.viewPassword
 
         )
