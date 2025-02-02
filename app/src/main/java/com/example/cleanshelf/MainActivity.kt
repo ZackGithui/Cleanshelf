@@ -4,15 +4,20 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.Composable
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotPasswordScreen
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotViewModel
+import com.example.cleanshelf.presentation.authentication.signIn.Login
 import com.example.cleanshelf.presentation.authentication.signIn.SignInViewModel
 import com.example.cleanshelf.presentation.authentication.signUp.SignUp
 import com.example.cleanshelf.presentation.authentication.signUp.SignUpViewModel
-
+import com.example.cleanshelf.presentation.homeScreen.HomeScreen
+import com.example.cleanshelf.presentation.navigation.AppScreens
 import com.example.cleanshelf.ui.theme.CleanshelfTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -23,10 +28,31 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CleanshelfTheme {
-              SignUp(viewModel = viewModel<SignUpViewModel>(), signUpState = viewModel<SignUpViewModel>().signUpState.collectAsStateWithLifecycle(),)
+                App()
 
             }
         }
     }
 }
 
+@Composable
+fun App() {
+    val navController = rememberNavController()
+    NavHost(navController = navController, startDestination = AppScreens.SignIn.route){
+       composable(AppScreens.SignIn.route){
+           Login(viewModel = viewModel<SignInViewModel>(), navController = navController)
+           
+       }
+        composable(AppScreens.SignUp.route){
+            SignUp(viewModel = viewModel<SignUpViewModel>(), signUpState = viewModel<SignUpViewModel>().signUpState.collectAsStateWithLifecycle())
+        }
+        composable(AppScreens.ForgetPassword.route){
+            ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>())
+        }
+        composable(AppScreens.HomeScreen.route){
+            HomeScreen()
+
+        }
+    }
+
+}

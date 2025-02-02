@@ -18,6 +18,9 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfButton
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfLabelButton
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfPasswordTextField
@@ -27,7 +30,7 @@ import com.example.cleanshelf.presentation.authentication.components.CleanShelfT
 fun Login(
     modifier: Modifier = Modifier,
     viewModel: SignInViewModel,
-    signInState: SignInState
+    navController: NavController
 ) {
     val signState: SignInState = viewModel.signInState.collectAsStateWithLifecycle().value
     Column(
@@ -47,15 +50,15 @@ fun Login(
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfTextField(
             value = signState.email,
-            onValueChange = { viewModel.uiEvents(SignInEvents.EmailChanged(it)) },
+            onValueChange = { viewModel.uiEvents(SignInEvents.EmailChanged(it), navController) },
             placeholder = "Email"
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfPasswordTextField(
             value = signState.password,
-            onValueChange = { viewModel.uiEvents(SignInEvents.PasswordChanged(it)) },
+            onValueChange = { viewModel.uiEvents(SignInEvents.PasswordChanged(it),navController) },
             placeholder = "Password",
-            onTrailingIconClicked = { viewModel.uiEvents(SignInEvents.ViewPassword) },
+            onTrailingIconClicked = { viewModel.uiEvents(SignInEvents.ViewPassword,navController)},
             isPasswordVisible = signState.viewPassword
 
         )
@@ -64,19 +67,19 @@ fun Login(
             modifier = modifier.fillMaxWidth(),
             unClickableText = "",
             clickableText = "Forgot password?",
-            onClick = { viewModel.uiEvents(SignInEvents.ForgotLabelClicked) }
+            onClick = { viewModel.uiEvents(SignInEvents.ForgotLabelClicked,navController) }
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfButton(
             modifier = modifier.fillMaxWidth(),
             title = "Sign In",
-            onClick = { viewModel.uiEvents(SignInEvents.SignInButtonClicked) }
+            onClick = { viewModel.uiEvents(SignInEvents.SignInButtonClicked,navController) }
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfLabelButton(modifier = modifier.fillMaxWidth(),
             unClickableText = "Don't have an account?",
             clickableText = "Sign Up",
-            onClick = { viewModel.uiEvents(SignInEvents.SignUpLabelClicked) })
+            onClick = { viewModel.uiEvents(SignInEvents.SignUpLabelClicked,navController) })
 
 
     }
@@ -86,9 +89,11 @@ fun Login(
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_NO)
 @Composable
 private fun SignInPrev() {
+    val navController = rememberNavController()
     Login(
         viewModel = viewModel<SignInViewModel>(),
-        signInState = viewModel<SignInViewModel>().signInState.collectAsStateWithLifecycle().value
+        navController = navController
+
     )
 
 }
