@@ -44,7 +44,7 @@ fun App() {
            
        }
         composable(AppScreens.SignUp.route){
-            SignUp(viewModel = viewModel<SignUpViewModel>(), signUpState = viewModel<SignUpViewModel>().signUpState.collectAsStateWithLifecycle())
+            SignUp(viewModel = viewModel<SignUpViewModel>(), signUpState = viewModel<SignUpViewModel>().signUpState.collectAsStateWithLifecycle(), navController = navController)
         }
         composable(AppScreens.ForgetPassword.route){
             ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>())
