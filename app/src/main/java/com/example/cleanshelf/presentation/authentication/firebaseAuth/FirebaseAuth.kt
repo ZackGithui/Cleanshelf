@@ -2,6 +2,9 @@ package com.example.cleanshelf.presentation.authentication.firebaseAuth
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.widget.Toast
+import androidx.compose.material3.Text
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
@@ -12,6 +15,7 @@ class AuthViewModel : ViewModel() {
     private val auth: FirebaseAuth = FirebaseAuth.getInstance()
     private val _authState: MutableLiveData<AuthState> = MutableLiveData<AuthState>()
     val authState = _authState
+
 
     init {
         checkStatus()
@@ -65,6 +69,9 @@ class AuthViewModel : ViewModel() {
     fun signOut() {
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
+    }
+    fun resetPassword(email:String){
+        auth.sendPasswordResetEmail(email)
     }
 
 

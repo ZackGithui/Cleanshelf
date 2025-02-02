@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.update
 class ForgotViewModel  : ViewModel() {
     private val _forgotState: MutableStateFlow<ForgotState> = MutableStateFlow(ForgotState())
     val forgotState = _forgotState.asStateFlow()
+    val auth= AuthViewModel()
 
 
     fun forgotUiEvents(uiEvents: ForgotEvents) {
@@ -23,6 +24,7 @@ class ForgotViewModel  : ViewModel() {
             }
 
             ForgotEvents.ForgotButtonClicked -> {
+                auth.resetPassword(_forgotState.value.email)
 
 
             }
