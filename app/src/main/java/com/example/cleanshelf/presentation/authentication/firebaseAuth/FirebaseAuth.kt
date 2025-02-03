@@ -2,9 +2,6 @@ package com.example.cleanshelf.presentation.authentication.firebaseAuth
 
 import android.content.ContentValues.TAG
 import android.util.Log
-import android.widget.Toast
-import androidx.compose.material3.Text
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
@@ -30,7 +27,7 @@ class AuthViewModel : ViewModel() {
         } else _authState.value = AuthState.Authenticated
     }
 
-    fun login(email: String, password: String) {
+    fun login(email: String, password: String, navController: NavController) {
 
         if (email.isEmpty() || password.isEmpty()) {
             _authState.value =
@@ -40,18 +37,29 @@ class AuthViewModel : ViewModel() {
         auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 _authState.value = AuthState.Authenticated
+                navController.navigate(AppScreens.HomeScreen.route) {
+                    popUpTo(AppScreens.SignIn.route) {
+                        inclusive = true
+                    }
+                }
             } else _authState.value =
                 AuthState.Error(task.exception?.message ?: "Something went wrong")
 
         }
     }
 
-    fun signUp(name: String, email: String, password: String) {
+    fun signUp(name: String, email: String, password: String, navController: NavController) {
 
         auth.createUserWithEmailAndPassword(email, password).addOnCompleteListener { task ->
             if (task.isSuccessful) {
                 val user = auth.currentUser
                 _authState.value = AuthState.Authenticated
+
+                navController.navigate(AppScreens.HomeScreen.route) {
+                    popUpTo(AppScreens.SignUp.route) {
+                        inclusive = true
+                    }
+                }
                 val profileUpdate = UserProfileChangeRequest.Builder()
                     .setDisplayName(name).build()
 
@@ -72,9 +80,10 @@ class AuthViewModel : ViewModel() {
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
     }
-    fun resetPassword(email:String,navController: NavController){
-        auth.sendPasswordResetEmail(email).addOnCompleteListener {task->
-            if(task.isSuccessful){
+
+    fun resetPassword(email: String, navController: NavController) {
+        auth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
+            if (task.isSuccessful) {
                 navController.navigate(AppScreens.SignIn.route)
             }
 

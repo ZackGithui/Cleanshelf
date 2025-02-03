@@ -38,7 +38,7 @@ class SignInViewModel()  : ViewModel() {
                 _signInState.update { it.copy(password = events.password) }
             }
 
-            SignInEvents.SignInButtonClicked -> {auth.login(_signInState.value.email,_signInState.value.password)
+            SignInEvents.SignInButtonClicked -> {auth.login(_signInState.value.email,_signInState.value.password,navController)
                 //authViewModel.login(_signInState.value.email,_signInState.value.password)
                 }
             SignInEvents.SignUpLabelClicked -> {navController.navigate(AppScreens.SignUp.route)}

@@ -23,7 +23,7 @@ class SignUpViewModel: ViewModel() {
                 navController.navigate(AppScreens.SignIn.route)
             }
             SignUpEvents.SignUpButtonClicked -> {
-                auth.signUp(_signUpState.value.username,_signUpState.value.email,_signUpState.value.password)
+                auth.signUp(_signUpState.value.username,_signUpState.value.email,_signUpState.value.password,navController)
                 //authViewModel.signUp(_signUpState.value.username,_signUpState.value.email,_signUpState.value.password)
             }
             is SignUpEvents.UserEmailChanged -> {
