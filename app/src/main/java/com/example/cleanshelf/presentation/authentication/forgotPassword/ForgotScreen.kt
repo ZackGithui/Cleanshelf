@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -17,15 +18,20 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfButton
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfTextField
+import com.example.cleanshelf.presentation.navigation.AppScreens
 
 @Composable
 fun ForgotPasswordScreen(
     modifier: Modifier = Modifier,
-    viewModel: ForgotViewModel
+    viewModel: ForgotViewModel,
+    navController: NavController
 ) {
     val forgotState = viewModel.forgotState.collectAsStateWithLifecycle()
+
 
     Column(
         modifier = modifier
@@ -45,14 +51,14 @@ fun ForgotPasswordScreen(
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfTextField(
             value = forgotState.value.email,
-            onValueChange = { viewModel.forgotUiEvents(ForgotEvents.EmailChanged(it)) },
+            onValueChange = { viewModel.forgotUiEvents(ForgotEvents.EmailChanged(it),navController) },
             placeholder = "Email"
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfButton(
             modifier = modifier.fillMaxWidth(),
             title = "Reset Password",
-            onClick = { viewModel.forgotUiEvents(ForgotEvents.ForgotButtonClicked) }
+            onClick = { viewModel.forgotUiEvents(ForgotEvents.ForgotButtonClicked,navController) }
         )
 
 
@@ -63,6 +69,7 @@ fun ForgotPasswordScreen(
 @Preview
 @Composable
 private fun ForgotPassword1() {
-    ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>())
+    val navController = rememberNavController()
+    ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>(), navController = navController)
 
 }

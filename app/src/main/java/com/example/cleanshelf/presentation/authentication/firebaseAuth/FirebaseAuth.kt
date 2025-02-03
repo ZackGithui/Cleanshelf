@@ -7,6 +7,8 @@ import androidx.compose.material3.Text
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
+import com.example.cleanshelf.presentation.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 
@@ -70,8 +72,14 @@ class AuthViewModel : ViewModel() {
         auth.signOut()
         _authState.value = AuthState.Unauthenticated
     }
-    fun resetPassword(email:String){
-        auth.sendPasswordResetEmail(email)
+    fun resetPassword(email:String,navController: NavController){
+        auth.sendPasswordResetEmail(email).addOnCompleteListener {task->
+            if(task.isSuccessful){
+                navController.navigate(AppScreens.SignIn.route)
+            }
+
+
+        }
     }
 
 

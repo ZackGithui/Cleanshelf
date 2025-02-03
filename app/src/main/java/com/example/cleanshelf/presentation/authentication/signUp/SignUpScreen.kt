@@ -52,21 +52,36 @@ fun SignUp(
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfTextField(
             value = signUpState.value.username,
-            onValueChange = { viewModel.uiEvents(SignUpEvents.UserNameChanged(it),navController) },
+            onValueChange = { viewModel.uiEvents(SignUpEvents.UserNameChanged(it), navController) },
             placeholder = "Username",
 
-        )
+            )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfTextField(
             value = signUpState.value.email,
-            onValueChange = { viewModel.uiEvents(SignUpEvents.UserEmailChanged(it),navController) },
+            onValueChange = {
+                viewModel.uiEvents(
+                    SignUpEvents.UserEmailChanged(it),
+                    navController
+                )
+            },
             placeholder = "Email"
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfPasswordTextField(
             value = signUpState.value.password,
-            onValueChange = { viewModel.uiEvents(SignUpEvents.UserPasswordChanged(it),navController) },
-            onTrailingIconClicked = { viewModel.uiEvents(SignUpEvents.VisibilityToggled,navController) },
+            onValueChange = {
+                viewModel.uiEvents(
+                    SignUpEvents.UserPasswordChanged(it),
+                    navController
+                )
+            },
+            onTrailingIconClicked = {
+                viewModel.uiEvents(
+                    SignUpEvents.VisibilityToggled,
+                    navController
+                )
+            },
             placeholder = "Password",
             isPasswordVisible = signUpState.value.viewPassword
         )
@@ -75,14 +90,14 @@ fun SignUp(
             modifier = Modifier.fillMaxWidth(),
             unClickableText = "Already have an account?",
             clickableText = "LogIn",
-            onClick = {viewModel.uiEvents(SignUpEvents.SignInLabelClicked,navController)}
+            onClick = { viewModel.uiEvents(SignUpEvents.SignInLabelClicked, navController) }
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfButton(
             modifier = modifier
                 .fillMaxWidth(),
             title = "Sign Up",
-            onClick = {viewModel.uiEvents(SignUpEvents.SignUpButtonClicked,navController)}
+            onClick = { viewModel.uiEvents(SignUpEvents.SignUpButtonClicked, navController) }
 
         )
 

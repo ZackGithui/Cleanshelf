@@ -1,6 +1,7 @@
 package com.example.cleanshelf.presentation.authentication.forgotPassword
 
 import androidx.lifecycle.ViewModel
+import androidx.navigation.NavController
 import com.example.cleanshelf.presentation.authentication.firebaseAuth.AuthViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,7 +14,7 @@ class ForgotViewModel  : ViewModel() {
     val auth= AuthViewModel()
 
 
-    fun forgotUiEvents(uiEvents: ForgotEvents) {
+    fun forgotUiEvents(uiEvents: ForgotEvents,navController: NavController) {
         when (uiEvents) {
             is ForgotEvents.EmailChanged -> {
                 _forgotState.update {
@@ -24,7 +25,8 @@ class ForgotViewModel  : ViewModel() {
             }
 
             ForgotEvents.ForgotButtonClicked -> {
-                auth.resetPassword(_forgotState.value.email)
+                auth.resetPassword(_forgotState.value.email, navController )
+
 
 
             }

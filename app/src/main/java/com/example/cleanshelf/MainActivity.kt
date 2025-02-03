@@ -38,18 +38,22 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun App() {
     val navController = rememberNavController()
-    NavHost(navController = navController, startDestination = AppScreens.SignIn.route){
-       composable(AppScreens.SignIn.route){
-           Login(viewModel = viewModel<SignInViewModel>(), navController = navController)
-           
-       }
-        composable(AppScreens.SignUp.route){
-            SignUp(viewModel = viewModel<SignUpViewModel>(), signUpState = viewModel<SignUpViewModel>().signUpState.collectAsStateWithLifecycle(), navController = navController)
+    NavHost(navController = navController, startDestination = AppScreens.SignIn.route) {
+        composable(AppScreens.SignIn.route) {
+            Login(viewModel = viewModel<SignInViewModel>(), navController = navController)
+
         }
-        composable(AppScreens.ForgetPassword.route){
-            ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>())
+        composable(AppScreens.SignUp.route) {
+            SignUp(
+                viewModel = viewModel<SignUpViewModel>(),
+                signUpState = viewModel<SignUpViewModel>().signUpState.collectAsStateWithLifecycle(),
+                navController = navController
+            )
         }
-        composable(AppScreens.HomeScreen.route){
+        composable(AppScreens.ForgetPassword.route) {
+            ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>(), navController = navController)
+        }
+        composable(AppScreens.HomeScreen.route) {
             HomeScreen()
 
         }
