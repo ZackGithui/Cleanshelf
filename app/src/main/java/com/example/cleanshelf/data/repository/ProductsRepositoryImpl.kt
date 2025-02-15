@@ -1,4 +1,50 @@
 package com.example.cleanshelf.data.repository
 
-class ProductsRepositoryImpl {
+import com.example.cleanshelf.data.remote.Cleanshelf
+import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
+import com.example.cleanshelf.domain.repository.ProductsRepository
+import com.example.cleanshelf.util.Resource
+import retrofit2.HttpException
+import java.io.IOException
+import javax.inject.Inject
+
+class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : ProductsRepository {
+    override suspend fun getAllProducts(): Resource<List<ProductResponseItem>> =
+        try {
+            val games = api.getAllProducts()
+            Resource.Success(games)
+        } catch (e: HttpException) {
+            Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
+
+        } catch (e: IOException) {
+            Resource.Error("Server error occurred")
+        } catch (e: Exception) {
+            Resource.Error("An unknown error occurred")
+        }
+
+
+    override suspend fun getProductsByCategory(category: String): Resource<List<ProductResponseItem>> =
+        try {
+            val games = api.getProductsOnCategory(category)
+            Resource.Success(games)
+        } catch (e: HttpException) {
+            Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
+        } catch (e: IOException) {
+            Resource.Error("Server error occurred")
+        } catch (e: Exception) {
+            Resource.Error("An unknown error occurred")
+        }
+
+    override suspend fun getProductById(id: Int): Resource<ProductResponseItem> =
+        try {
+            val game = api.getProductById(id)
+            Resource.Success(game)
+        } catch (e: HttpException) {
+            Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
+        } catch (e: IOException) {
+            Resource.Error("Server error occurred")
+        } catch (e: Exception) {
+            Resource.Error("An unknown error occurred")
+        }
+
 }
