@@ -43,10 +43,6 @@ object ObjectModule {
     }
 
 
-    @Provides
-    @Singleton
-    fun provideProductRepository(productsRepositoryImpl: ProductsRepositoryImpl): ProductsRepository {
-        return productsRepositoryImpl
-    }
+
 
 }

@@ -11,8 +11,8 @@ import javax.inject.Inject
 class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : ProductsRepository {
     override suspend fun getAllProducts(): Resource<List<ProductResponseItem>> =
         try {
-            val games = api.getAllProducts()
-            Resource.Success(games)
+            val products = api.getAllProducts()
+            Resource.Success(products)
         } catch (e: HttpException) {
             Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
 
@@ -25,8 +25,8 @@ class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : 
 
     override suspend fun getProductsByCategory(category: String): Resource<List<ProductResponseItem>> =
         try {
-            val games = api.getProductsOnCategory(category)
-            Resource.Success(games)
+            val products = api.getProductsOnCategory(category)
+            Resource.Success(products)
         } catch (e: HttpException) {
             Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
         } catch (e: IOException) {
@@ -37,8 +37,8 @@ class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : 
 
     override suspend fun getProductById(id: Int): Resource<ProductResponseItem> =
         try {
-            val game = api.getProductById(id)
-            Resource.Success(game)
+            val product = api.getProductById(id)
+            Resource.Success(product)
         } catch (e: HttpException) {
             Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
         } catch (e: IOException) {
