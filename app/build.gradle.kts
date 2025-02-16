@@ -67,6 +67,7 @@ dependencies {
     implementation(libs.androidx.runtime.livedata)
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
+    implementation(libs.firebase.auth)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -77,6 +78,7 @@ dependencies {
     implementation(libs.androidx.retrofit)
     implementation(libs.androidx.moshi)
     implementation(libs.androidx.converter)
+
     //Material 3 Icons
     implementation("androidx.compose.material:material-icons-extended:1.6.7")
     // Navigation
@@ -93,8 +95,8 @@ dependencies {
     implementation("androidx.room:room-paging:2.6.1")
 
 //firebase
-    //implementation("com.google.firebase:firebase-bom:33.1.1")
-   // implementation("com.google.firebase:firebase-auth")
+    implementation("com.google.firebase:firebase-bom:33.1.1")
+    implementation("com.google.firebase:firebase-auth")
 
     // Dagger - Hilt
     implementation("com.google.dagger:hilt-android:2.51.1")
@@ -112,4 +114,6 @@ dependencies {
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 //lottie
     implementation("com.airbnb.android:lottie-compose:6.0.0")
+    //coil
+    implementation("io.coil-kt:coil-compose:2.6.0")
 }
