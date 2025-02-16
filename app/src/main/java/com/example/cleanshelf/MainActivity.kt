@@ -28,7 +28,8 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CleanshelfTheme {
-                App()
+                val navController = rememberNavController()
+               HomeScreen(navController = navController)
 
             }
         }
@@ -54,7 +55,7 @@ fun App() {
             ForgotPasswordScreen(viewModel = viewModel<ForgotViewModel>(), navController = navController)
         }
         composable(AppScreens.HomeScreen.route) {
-            HomeScreen()
+            HomeScreen(navController = navController)
 
         }
     }

@@ -35,7 +35,7 @@ fun TopPart() {
             painter = painterResource(id = R.drawable.cleanshelficon),
 
             contentDescription = stringResource(id = R.string.logo),
-            modifier = Modifier.size(100.dp),
+            modifier = Modifier.size(110.dp),
             contentScale = ContentScale.Crop,
            // colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
 

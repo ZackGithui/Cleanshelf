@@ -1,5 +1,7 @@
 package com.example.cleanshelf.presentation.homeScreen
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.cleanshelf.data.remote.Cleanshelf
@@ -45,6 +47,7 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
                     error = ""
 
                 )
+                Log.d(TAG, "getAllProducts: ${_HomeScreenState.value.dairyProducts}")
             }
             catch (e: Exception){
                 _HomeScreenState.value = _HomeScreenState.value.copy(
