@@ -1,4 +1,4 @@
-package com.example.cleanshelf.presentation.homeScreen.components
+package com.example.cleanshelf.presentation.detailScreen.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -20,7 +20,7 @@ import coil.compose.AsyncImage
 import coil.request.ImageRequest
 
 @Composable
-fun ImageHolder(
+fun Holder(
     modifier: Modifier = Modifier,
     image: String,
     onClick: () -> Unit
@@ -35,8 +35,8 @@ fun ImageHolder(
             model = ImageRequest.Builder(LocalContext.current).data(image)
                 .build(),
             contentDescription = "image",
-            contentScale = ContentScale.Fit,
-
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxWidth()
 
 
         )
@@ -47,7 +47,7 @@ fun ImageHolder(
 @Preview
 @Composable
 private fun ImageHolder2() {
-    ImageHolder(
+    Holder(
         image = "", onClick = {}, modifier = Modifier
             .height(150.dp)
             .width(100.dp)

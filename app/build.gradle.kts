@@ -116,4 +116,8 @@ dependencies {
     implementation("com.airbnb.android:lottie-compose:6.0.0")
     //coil
     implementation("io.coil-kt:coil-compose:2.6.0")
+    //Accompanist
+    implementation ("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation ("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+
 }

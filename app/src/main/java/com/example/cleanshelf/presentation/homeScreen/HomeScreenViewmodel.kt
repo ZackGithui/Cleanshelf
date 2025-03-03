@@ -1,10 +1,10 @@
 package com.example.cleanshelf.presentation.homeScreen
 
 import android.content.ContentValues.TAG
+import android.media.metrics.Event
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.cleanshelf.data.remote.Cleanshelf
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import com.example.cleanshelf.domain.repository.ProductsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,7 +15,8 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRepository) : ViewModel() {
+class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRepository) :
+    ViewModel() {
     private val _HomeScreenState: MutableStateFlow<HomeScreenState> =
         MutableStateFlow(HomeScreenState())
     val HomeScreenState = _HomeScreenState.asStateFlow()
@@ -37,6 +38,7 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
                 val products = repository.getAllProducts().data
                 _HomeScreenState.value = _HomeScreenState.value.copy(
                     isLoading = false,
+                    all = products!!,
                     bakery = products!!.filter { it.category.lowercase() == "bakery" },
                     pantryStaples = products.filter { it.category.lowercase() == "pantry staples" },
                     beverages = products.filter { it.category.lowercase() == "beverages" },
@@ -48,8 +50,7 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
 
                 )
                 Log.d(TAG, "getAllProducts: ${_HomeScreenState.value.dairyProducts}")
-            }
-            catch (e: Exception){
+            } catch (e: Exception) {
                 _HomeScreenState.value = _HomeScreenState.value.copy(
                     isLoading = false,
                     error = repository.getAllProducts().message ?: e.localizedMessage
@@ -57,6 +58,37 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
             }
         }
     }
+
+    fun onEvents(event: Events) {
+        when (event) {
+            is Events.CategoryChanged -> {
+                _HomeScreenState.value = _HomeScreenState.value.copy(
+                    category = event.category,
+                    isLoading = true
+                )
+
+                viewModelScope.launch {
+                    try {
+                        val products = repository.getProductsByCategory(event.category)
+
+                        _HomeScreenState.value = _HomeScreenState.value.copy(
+                            all = products.data!!, // Update the product list based on the category
+                            isLoading = false
+                        )
+
+                        Log.d(TAG, "Updated products for category: ${event.category}")
+                    } catch (e: Exception) {
+                        _HomeScreenState.value = _HomeScreenState.value.copy(
+                            isLoading = false,
+                            error = e.localizedMessage ?: "Unknown error"
+                        )
+                    }
+                }
+            }
+        }
+    }
+
+
 
 }
 
@@ -70,5 +102,11 @@ data class HomeScreenState(
     val freshProducts: List<ProductResponseItem> = emptyList(),
     val dairyProducts: List<ProductResponseItem> = emptyList(),
     val frozenFood: List<ProductResponseItem> = emptyList(),
-    val cleaning: List<ProductResponseItem> = emptyList()
+    val cleaning: List<ProductResponseItem> = emptyList(),
+    val all: List<ProductResponseItem> = emptyList(),
+    val category: String = "bakery"
 )
+
+sealed class Events {
+    data class CategoryChanged(val category: String) : Events()
+}

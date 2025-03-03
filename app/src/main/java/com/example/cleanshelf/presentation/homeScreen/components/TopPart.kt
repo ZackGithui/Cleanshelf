@@ -1,6 +1,7 @@
 package com.example.cleanshelf.presentation.homeScreen.components
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -24,7 +25,8 @@ import com.example.cleanshelf.R
 fun TopPart() {
     Row (modifier = Modifier
         .fillMaxWidth()
-        .padding(10.dp),
+        .padding(10.dp)
+        ,
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){

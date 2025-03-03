@@ -1,5 +1,7 @@
 package com.example.cleanshelf.data.repository
 
+import android.content.ContentValues.TAG
+import android.util.Log
 import com.example.cleanshelf.data.remote.Cleanshelf
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import com.example.cleanshelf.domain.repository.ProductsRepository
@@ -27,6 +29,7 @@ class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : 
         try {
             val products = api.getProductsOnCategory(category)
             Resource.Success(products)
+
         } catch (e: HttpException) {
             Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
         } catch (e: IOException) {
@@ -35,16 +38,25 @@ class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : 
             Resource.Error("An unknown error occurred")
         }
 
-    override suspend fun getProductById(id: Int): Resource<ProductResponseItem> =
+    override suspend fun getProductById(id: Int): Resource<List<ProductResponseItem>> =
         try {
+            Log.d(TAG, "Fetching product with ID: $id")
+
             val product = api.getProductById(id)
+
+            Log.d(TAG, "Fetched Product: $product") // Log response
+
             Resource.Success(product)
         } catch (e: HttpException) {
+            Log.e(TAG, "HTTP Exception: ${e.message}")
             Resource.Error(e.localizedMessage ?: "Unexpected error occurred")
         } catch (e: IOException) {
+            Log.e(TAG, "IOException: ${e.message}")
             Resource.Error("Server error occurred")
         } catch (e: Exception) {
+            Log.e(TAG, "Exception: ${e.message}")
             Resource.Error("An unknown error occurred")
         }
+
 
 }

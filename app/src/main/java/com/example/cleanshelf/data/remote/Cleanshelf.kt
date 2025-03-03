@@ -2,6 +2,7 @@ package com.example.cleanshelf.data.remote
 
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import retrofit2.http.GET
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface Cleanshelf {
@@ -14,10 +15,10 @@ interface Cleanshelf {
         @Query("category") category: String
     ): List<ProductResponseItem>
 
-    @GET("product")
+    @GET("product/{id}")
     suspend fun getProductById(
-        @Query("id") id: Int
-    ): ProductResponseItem
+        @Path ("id") id : Int
+    ): List<ProductResponseItem>
 
 
 }
