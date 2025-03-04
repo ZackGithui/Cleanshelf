@@ -17,14 +17,19 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.cleanshelf.data.local.ProductEntity
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfButton
+import com.example.cleanshelf.presentation.cart.CartViewModel
 
 @Composable
 fun DetailItem(
     modifier: Modifier = Modifier,
-    productResponseItem: List<ProductResponseItem>
+    productResponseItem: List<ProductResponseItem>,
+    productEntity: ProductEntity
 ) {
+    val cartViewModel : CartViewModel = hiltViewModel()
     LazyColumn(modifier = Modifier.fillMaxSize()
         .background(MaterialTheme.colorScheme.background)) {
         items(productResponseItem){productResponseItem ->
@@ -68,7 +73,7 @@ fun DetailItem(
                 Spacer(modifier = Modifier.height(20.dp))
 
 
-                CleanShelfButton(title = "Add to Cart", onClick = {}, modifier = Modifier.fillMaxWidth())
+                CleanShelfButton(title = "Add to Cart", onClick = { cartViewModel.addProductToCart(productEntity)}, modifier = Modifier.fillMaxWidth())
 
             }
 

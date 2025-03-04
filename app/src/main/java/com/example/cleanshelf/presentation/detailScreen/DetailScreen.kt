@@ -7,7 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.example.cleanshelf.data.local.ProductEntity
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
+import com.example.cleanshelf.presentation.cart.CartViewModel
 import com.example.cleanshelf.presentation.detailScreen.components.DetailItem
 import com.example.cleanshelf.ui.theme.CleanshelfTheme
 
@@ -17,7 +19,9 @@ fun DetailScreen(
     modifier: Modifier = Modifier,
 
 
+
     ) {
+
 
     val detailViewModel: DetailViewModel = hiltViewModel()
     val state = detailViewModel.detailState.collectAsStateWithLifecycle().value
@@ -27,7 +31,24 @@ fun DetailScreen(
     }
 
 
-    state.product?.let { DetailItem(productResponseItem = state.product) }
+
+
+    // Find the product that matches the productId
+    val product = state.product?.firstOrNull { it.id == productId }
+
+    product?.let {
+        DetailItem(
+            productResponseItem = listOf(it),  // Pass a list as expected
+            productEntity = ProductEntity(
+                id = it.id,
+                name = it.name,
+                price = it.price,
+                description = it.description,
+                image = it.image,
+                quantity = 1  // Default quantity
+            )
+        )
+    }
 
 
 }
