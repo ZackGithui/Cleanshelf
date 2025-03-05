@@ -7,6 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.cleanshelf.data.local.ProductEntity
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import com.example.cleanshelf.presentation.cart.CartViewModel
@@ -17,6 +19,7 @@ import com.example.cleanshelf.ui.theme.CleanshelfTheme
 fun DetailScreen(
     productId: Int,
     modifier: Modifier = Modifier,
+    navController: NavController
 
 
 
@@ -38,6 +41,7 @@ fun DetailScreen(
 
     product?.let {
         DetailItem(
+            navController = navController,
             productResponseItem = listOf(it),  // Pass a list as expected
             productEntity = ProductEntity(
                 id = it.id,
@@ -67,7 +71,8 @@ private fun DetailScreenPrev() {
             description = "This soft, thin flatbread made from finely ground wholemeal wheat flour. Pair this up with fillings of your choice, for wraps, tacos... let your creativity lead!",
             image = "https://cdn.mafrservices.com/pim-content/KEN/media/product/42980/1718895604/42980_main.jpg?im=Resize=400"
         )
-        DetailScreen(productId = 0)
+        val navController = rememberNavController()
+        DetailScreen(productId = 0, navController = navController)
 
     }
 

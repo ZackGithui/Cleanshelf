@@ -21,6 +21,7 @@ import com.example.cleanshelf.presentation.authentication.signIn.Login
 import com.example.cleanshelf.presentation.authentication.signIn.SignInViewModel
 import com.example.cleanshelf.presentation.authentication.signUp.SignUp
 import com.example.cleanshelf.presentation.authentication.signUp.SignUpViewModel
+import com.example.cleanshelf.presentation.cart.CartScreen
 import com.example.cleanshelf.presentation.detailScreen.DetailScreen
 import com.example.cleanshelf.presentation.homeScreen.HomeScreen
 import com.example.cleanshelf.presentation.navigation.AppScreens
@@ -76,8 +77,12 @@ fun App(navController: NavHostController) {
             val productId= backStackEntry.arguments?.getInt("id")
             DetailScreen(
                 productId = productId ?: 1,
+                navController = navController
 
             )
+        }
+        composable(AppScreens.CartScreen.route){
+            CartScreen()
         }
     }
 
