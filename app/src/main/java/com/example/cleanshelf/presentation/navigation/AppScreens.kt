@@ -8,6 +8,7 @@ sealed class AppScreens(val route: String) {
     data object DetailScreen : AppScreens("DetailScreen/{id}") {
         fun createRoute(id: Int) = "DetailScreen/$id"
     }
-
     data object CartScreen : AppScreens("CartScreen")
+
+
 }

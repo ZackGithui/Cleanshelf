@@ -36,6 +36,12 @@ class CartViewModel @Inject constructor( private val productDao: ProductDao): Vi
         }
     }
 
+    fun removeProductFromCart(productEntity: ProductEntity){
+        viewModelScope.launch {
+            productDao.deleteProducts(productEntity)
+        }
+    }
+
 
 }
 

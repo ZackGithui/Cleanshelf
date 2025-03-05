@@ -12,6 +12,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Text
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
@@ -19,23 +23,27 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cleanshelf.data.local.ProductEntity
+import com.example.cleanshelf.presentation.cart.CartViewModel
 import com.example.cleanshelf.presentation.homeScreen.components.ImageHolder
 
 @Composable
 fun CartItem(
     modifier: Modifier = Modifier,
-    productEntity: ProductEntity
+    productEntity: ProductEntity,
+    cartViewModel: CartViewModel = hiltViewModel()
 ) {
+
     Box(
         modifier = Modifier
             .padding(horizontal = 5.dp)
             .border(
-            width = 1.dp,
-            color = MaterialTheme.colorScheme.onBackground,
-            shape = RoundedCornerShape(10.dp)
+                width = 1.dp,
+                color = MaterialTheme.colorScheme.onBackground,
+                shape = RoundedCornerShape(10.dp)
 
-        )
+            )
     ) {
 
         Row(
@@ -46,7 +54,7 @@ fun CartItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Row {
+            Row(modifier = Modifier.fillMaxWidth(0.7f)) {
                 Row {
                     ImageHolder(
                         image = productEntity.image, onClick = {}, modifier = Modifier
@@ -66,19 +74,29 @@ fun CartItem(
 
                     }
                 }
+                Row(
+                    horizontalArrangement = Arrangement.Center,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    IconButton(onClick = { productEntity.quantity - 1 }) {
+                        Text(text = "-")
+
+                    }
+                    Text(text = productEntity.quantity.toString())
+                    IconButton(onClick = { productEntity.quantity + 1 }) {
+                        Text(text = "+")
+
+                    }
+                }
             }
 
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                IconButton(onClick = { productEntity.quantity - 1 }) {
-                    Text(text = "-")
-
-                }
-                Text(text = productEntity.quantity.toString())
-                IconButton(onClick = { productEntity.quantity + 1 }) {
-                    Text(text = "+")
+                Button(onClick = { cartViewModel.removeProductFromCart(productEntity)}) {
+                    Icon(imageVector = Icons.Default.Delete, contentDescription = "delete",
+                        modifier = Modifier.height(40.dp))
 
                 }
             }
