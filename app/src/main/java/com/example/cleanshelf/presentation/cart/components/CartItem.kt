@@ -21,9 +21,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cleanshelf.data.local.ProductEntity
 import com.example.cleanshelf.presentation.cart.CartViewModel
 import com.example.cleanshelf.presentation.homeScreen.components.ImageHolder
@@ -34,6 +35,7 @@ fun CartItem(
     productEntity: ProductEntity,
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
+    val cartState = cartViewModel.cartState.collectAsStateWithLifecycle().value
 
     Box(
         modifier = Modifier
@@ -54,22 +56,35 @@ fun CartItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
 
-            Row(modifier = Modifier.fillMaxWidth(0.7f)) {
+            Row(modifier = Modifier.fillMaxWidth(0.8f)) {
                 Row {
                     ImageHolder(
                         image = productEntity.image, onClick = {}, modifier = Modifier
                             .width(100.dp)
                     )
                 }
-                Spacer(modifier = Modifier.width(40.dp))
+                Spacer(modifier = Modifier.width(20.dp))
 
-                Row {
+                Row (modifier = Modifier.width(100.dp)
+
+                ){
                     Column {
-                        Text(text = productEntity.name)
+                        Text(
+                            text = productEntity.name,
+                            color = MaterialTheme.colorScheme.onBackground,
+                            maxLines = 1,
+                            overflow = TextOverflow.Ellipsis
+                        )
                         Spacer(modifier = Modifier.height(10.dp))
-                        Text(text = productEntity.price.toString())
+                        Text(
+                            text = productEntity.price.toString(),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
                         Spacer(modifier = Modifier.height(10.dp))
-                        Text(text = productEntity.quantity.toString())
+                        Text(
+                            text = productEntity.quantity.toString(),
+                            color = MaterialTheme.colorScheme.onBackground
+                        )
 
 
                     }
@@ -90,13 +105,17 @@ fun CartItem(
                 }
             }
 
+
             Row(
                 horizontalArrangement = Arrangement.Center,
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                Button(onClick = { cartViewModel.removeProductFromCart(productEntity)}) {
-                    Icon(imageVector = Icons.Default.Delete, contentDescription = "delete",
-                        modifier = Modifier.height(40.dp))
+
+                Button(onClick = { cartViewModel.removeProductFromCart(productEntity) }) {
+                    Icon(
+                        imageVector = Icons.Default.Delete, contentDescription = "delete",
+                        modifier = Modifier.height(40.dp)
+                    )
 
                 }
             }

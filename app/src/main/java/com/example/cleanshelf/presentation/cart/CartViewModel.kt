@@ -48,4 +48,6 @@ class CartViewModel @Inject constructor( private val productDao: ProductDao): Vi
 
 data class CartState(
     val products : List<ProductEntity> ? = emptyList()
-)
+){
+    val totalPrice:Int get() = products?.sumOf { it.price * it.quantity } ?: 0
+}
