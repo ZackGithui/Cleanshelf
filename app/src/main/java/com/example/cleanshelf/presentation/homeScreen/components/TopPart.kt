@@ -20,28 +20,36 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.cleanshelf.R
+import com.google.firebase.auth.FirebaseAuth
 
 @Composable
 fun TopPart() {
     Row (modifier = Modifier
         .fillMaxWidth()
         .padding(10.dp)
-        ,
+        .background(MaterialTheme.colorScheme.background),
         horizontalArrangement = Arrangement.SpaceBetween,
         verticalAlignment = Alignment.CenterVertically
     ){
-        Text(text = "Cleanshelf",
-            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 24.sp)
-        )
+        val auth: FirebaseAuth = FirebaseAuth.getInstance()
+        auth.currentUser?.displayName?.let {
+            Text(text = "Welcome, $it! ",
+                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp),
+                color = MaterialTheme.colorScheme.onBackground
+            )
+        }
+
+
         Image(
             painter = painterResource(id = R.drawable.cleanshelficon),
 
             contentDescription = stringResource(id = R.string.logo),
             modifier = Modifier.size(110.dp),
             contentScale = ContentScale.Crop,
-           // colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
+           //colorFilter = ColorFilter.tint(color = MaterialTheme.colorScheme.onBackground)
 
         )
+
 
 
     }

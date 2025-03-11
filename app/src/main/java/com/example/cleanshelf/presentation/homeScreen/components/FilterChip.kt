@@ -56,8 +56,8 @@ fun CategoryTab(
             ) {
                 Text(
                     text = category,
-                    style = if (selectedIndex == index) TextStyle(color = MaterialTheme.colorScheme.onPrimary) else {
-                        TextStyle(color = MaterialTheme.colorScheme.onPrimary)
+                    style = if (selectedIndex == index) TextStyle(color = MaterialTheme.colorScheme.onBackground) else {
+                        TextStyle(color = MaterialTheme.colorScheme.onBackground)
                     }
 
                 )

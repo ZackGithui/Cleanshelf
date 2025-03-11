@@ -19,10 +19,19 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.example.cleanshelf.data.local.ProductEntity
@@ -36,6 +45,17 @@ fun CartItem(
     cartViewModel: CartViewModel = hiltViewModel()
 ) {
     val cartState = cartViewModel.cartState.collectAsStateWithLifecycle().value
+    var quantity by remember {
+        mutableIntStateOf(productEntity.quantity)
+
+    }
+    LaunchedEffect(quantity) {
+        if (quantity != productEntity.quantity) {
+            cartViewModel.addProductToCart(productEntity.copy(quantity = quantity))
+        }
+    }
+
+
 
     Box(
         modifier = Modifier
@@ -71,6 +91,7 @@ fun CartItem(
                     Column {
                         Text(
                             text = productEntity.name,
+                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                             color = MaterialTheme.colorScheme.onBackground,
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
@@ -78,11 +99,13 @@ fun CartItem(
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
                             text = productEntity.price.toString(),
+                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                             color = MaterialTheme.colorScheme.onBackground
                         )
                         Spacer(modifier = Modifier.height(10.dp))
                         Text(
                             text = productEntity.quantity.toString(),
+                            style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                             color = MaterialTheme.colorScheme.onBackground
                         )
 
@@ -93,12 +116,12 @@ fun CartItem(
                     horizontalArrangement = Arrangement.Center,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    IconButton(onClick = { productEntity.quantity - 1 }) {
+                    IconButton(onClick = {  if (quantity >1)quantity --  }) {
                         Text(text = "-")
 
                     }
-                    Text(text = productEntity.quantity.toString())
-                    IconButton(onClick = { productEntity.quantity + 1 }) {
+                    Text(text = quantity.toString())
+                    IconButton(onClick = { quantity ++ }) {
                         Text(text = "+")
 
                     }
