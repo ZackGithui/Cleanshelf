@@ -19,3 +19,20 @@ interface ProductDao {
     @Query("select * from ProductEntity")
     fun getAllProducts(): Flow<List<ProductEntity>>
 }
+
+
+@Dao
+interface BookMarkDao {
+    @Upsert
+    suspend fun updateBookMarks(bookMark: BookMark)
+
+    @Delete
+    suspend fun deleteBookMark(bookMark: BookMark)
+
+    @Query("Select * From BookMark")
+    fun getAllBookMarks(): Flow<List<BookMark>>
+
+    @Query("Select * From BookMark where id = :id")
+    fun getBookMArkById(id: Int): BookMark?
+}
+

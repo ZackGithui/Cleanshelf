@@ -14,3 +14,13 @@ data class ProductEntity(
     val price: Int
 
 )
+
+
+@Entity(tableName = "BookMark")
+data class BookMark(
+    @PrimaryKey val id: Int,
+    val name: String,
+    val image: String,
+    val description: String,
+    val price: Int
+)

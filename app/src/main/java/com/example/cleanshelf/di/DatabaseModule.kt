@@ -2,6 +2,7 @@ package com.example.cleanshelf.di
 
 import android.content.Context
 import androidx.room.Room
+import com.example.cleanshelf.data.local.BookMarkDao
 import com.example.cleanshelf.data.local.ProductDao
 import com.example.cleanshelf.data.local.ProductsDatabaseDatabase
 import dagger.Module
@@ -27,6 +28,13 @@ object DatabaseModule {
     @Provides
     fun provideProductDao(productsDatabaseDatabase: ProductsDatabaseDatabase) :ProductDao{
         return productsDatabaseDatabase.productDao()
+    }
+
+
+    @Singleton
+    @Provides
+    fun provideBookMarkDao(productsDatabaseDatabase: ProductsDatabaseDatabase) : BookMarkDao{
+        return productsDatabaseDatabase.bookMarkDao()
     }
 
 
