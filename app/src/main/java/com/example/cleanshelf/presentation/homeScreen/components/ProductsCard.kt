@@ -9,10 +9,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.FavoriteBorder
+import androidx.compose.material.icons.outlined.Bookmark
+import androidx.compose.material.icons.outlined.BookmarkBorder
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -22,29 +22,37 @@ import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.max
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
+import com.example.cleanshelf.presentation.bookMarks.BookMarksViewModel
 import com.example.cleanshelf.ui.theme.CleanshelfTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProductsCard(
     product: ProductResponseItem,
-    onSaveClicked: () -> Unit,
-    onProductItemClicked: (Int) -> Unit,
+    onSaveClicked: (ProductResponseItem) -> Unit,
+    onProductItemClicked: (Int) -> Unit
+) {
+    val bookMarksViewModel: BookMarksViewModel = hiltViewModel()
+    val isFavouriteSet = bookMarksViewModel.isFavourite.observeAsState(emptySet()).value // Observe bookmarked IDs
 
+    // Ensure isBookMarked() is called only once per product ID
+    LaunchedEffect(product.id) {
+        bookMarksViewModel.isBookMarked(product.id)
+    }
 
-    ) {
+    val isBookmarked = isFavouriteSet.contains(product.id) // Check if this product is bookmarked
 
     Card(
         modifier = Modifier
@@ -57,7 +65,6 @@ fun ProductsCard(
             ),
         elevation = CardDefaults.cardElevation(defaultElevation = 5.dp),
         shape = RoundedCornerShape(12.dp),
-
         onClick = { onProductItemClicked(product.id) }
     ) {
         Row(
@@ -65,40 +72,36 @@ fun ProductsCard(
             horizontalArrangement = Arrangement.End
         ) {
             IconButton(
-                onClick = { onSaveClicked() },
+                onClick = { onSaveClicked(product) },
                 colors = IconButtonDefaults.iconButtonColors(
-                    //containerColor = MaterialTheme.colorScheme.secondary, // Background color
-                    contentColor = MaterialTheme.colorScheme.onSurface, // Icon color
-                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant, // Disabled state
-                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant // Disabled icon color
+                    contentColor = MaterialTheme.colorScheme.onSurface,
+                    disabledContainerColor = MaterialTheme.colorScheme.surfaceVariant,
+                    disabledContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             ) {
                 Icon(
-                    imageVector = Icons.Outlined.FavoriteBorder,
+                    imageVector = if (isBookmarked) Icons.Outlined.Bookmark else Icons.Outlined.BookmarkBorder,
                     contentDescription = "Favourite",
                     modifier = Modifier.size(25.dp)
                 )
-
             }
         }
-        Spacer(modifier = Modifier.height(3.dp))
 
+        Spacer(modifier = Modifier.height(3.dp))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.Center,
             verticalAlignment = Alignment.CenterVertically,
         ) {
-
-
             ImageHolder(
                 image = product.image, onClick = { onProductItemClicked(product.id) },
-                modifier = Modifier
-                    .height(80.dp)
+                modifier = Modifier.height(80.dp)
             )
         }
 
         Spacer(modifier = Modifier.height(5.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -111,9 +114,10 @@ fun ProductsCard(
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onBackground
             )
-
         }
+
         Spacer(modifier = Modifier.height(5.dp))
+
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -131,40 +135,6 @@ fun ProductsCard(
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
                 color = MaterialTheme.colorScheme.onBackground
             )
-
-
         }
-
-
-    }
-}
-
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-    name = "DefaultPreviewDark"
-)
-@Preview(
-    uiMode = Configuration.UI_MODE_NIGHT_NO,
-    name = "DefaultPreviewLight"
-)
-@Composable
-
-private fun ProductsPrev() {
-
-    val productItem = ProductResponseItem(
-        id = 51,
-        name = "Tortilla Wraps",
-        category = "Frozen Food",
-        price = 520,
-        unit = "360 g",
-        description = "This soft, thin flatbread made from finely ground wholemeal wheat flour. Pair this up with fillings of your choice, for wraps, tacos... let your creativity lead!",
-        image = "https://cdn.mafrservices.com/pim-content/KEN/media/product/42980/1718895604/42980_main.jpg?im=Resize=400"
-    )
-    CleanshelfTheme {
-        ProductsCard(
-            product = productItem, onSaveClicked = { /*TODO*/ },
-            onProductItemClicked = {},
-        )
-
     }
 }

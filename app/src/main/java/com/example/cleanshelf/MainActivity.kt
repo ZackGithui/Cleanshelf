@@ -20,13 +20,14 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.example.cleanshelf.data.local.BookMark
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotPasswordScreen
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotViewModel
 import com.example.cleanshelf.presentation.authentication.signIn.Login
 import com.example.cleanshelf.presentation.authentication.signIn.SignInViewModel
 import com.example.cleanshelf.presentation.authentication.signUp.SignUp
 import com.example.cleanshelf.presentation.authentication.signUp.SignUpViewModel
-import com.example.cleanshelf.presentation.bookMarks.BookMark
+import com.example.cleanshelf.presentation.bookMarks.BookMarkScreen
 import com.example.cleanshelf.presentation.cart.CartScreen
 import com.example.cleanshelf.presentation.detailScreen.DetailScreen
 import com.example.cleanshelf.presentation.homeScreen.HomeScreen
@@ -111,7 +112,7 @@ fun App(navController: NavHostController,modifier: Modifier) {
                 SearchScreen(navController = navController)
             }
             composable(AppScreens.BookMarks.route) {
-                BookMark()
+                BookMarkScreen()
             }
         }
     }

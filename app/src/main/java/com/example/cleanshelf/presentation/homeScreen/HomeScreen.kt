@@ -15,6 +15,7 @@ import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Modifier
@@ -24,6 +25,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
+import com.example.cleanshelf.presentation.bookMarks.BookMarksViewModel
 import com.example.cleanshelf.presentation.homeScreen.components.CategoryTab
 import com.example.cleanshelf.presentation.homeScreen.components.ProductsCard
 import com.example.cleanshelf.presentation.homeScreen.components.TopPart
@@ -34,9 +36,14 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomeScreen(
     navController: NavHostController,
-    homeScreenViewmodel: HomeScreenViewmodel = hiltViewModel()
+    homeScreenViewmodel: HomeScreenViewmodel = hiltViewModel(),
+    bookMarksViewModel: BookMarksViewModel = hiltViewModel()
 ) {
     val homeScreenState = homeScreenViewmodel.HomeScreenState.collectAsStateWithLifecycle().value
+    val isFavourite = bookMarksViewModel.isFavourite.observeAsState().value
+
+
+
 
     val categories = listOf(
         "All",
@@ -97,9 +104,13 @@ fun HomeScreen(
                         TAG,
                         "Displaying products for category: ${homeScreenState.category}, Data: $data"
                     )
+                    bookMarksViewModel.isBookMarked(data.id)
+
+
+
                     ProductsCard(
                         product = data,
-                        onSaveClicked = { /*TODO*/ },
+                        onSaveClicked = {bookMarksViewModel.toggleButton(data)},
                         onProductItemClicked = { productId ->
                             navController.navigate(
                                 AppScreens.DetailScreen.createRoute(productId)
