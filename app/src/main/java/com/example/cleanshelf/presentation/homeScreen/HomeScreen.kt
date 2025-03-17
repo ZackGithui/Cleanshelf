@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -28,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.cleanshelf.presentation.bookMarks.BookMarksViewModel
 import com.example.cleanshelf.presentation.homeScreen.components.CategoryTab
 import com.example.cleanshelf.presentation.homeScreen.components.ProductsCard
+import com.example.cleanshelf.presentation.homeScreen.components.ShimmerScreen
 import com.example.cleanshelf.presentation.homeScreen.components.TopPart
 import com.example.cleanshelf.presentation.navigation.AppScreens
 import kotlinx.coroutines.launch
@@ -41,8 +41,6 @@ fun HomeScreen(
 ) {
     val homeScreenState = homeScreenViewmodel.HomeScreenState.collectAsStateWithLifecycle().value
     val isFavourite = bookMarksViewModel.isFavourite.observeAsState().value
-
-
 
 
     val categories = listOf(
@@ -91,6 +89,8 @@ fun HomeScreen(
             "pantry staples" -> homeScreenState.pantryStaples
             else -> homeScreenState.all
         }
+
+
         HorizontalPager(state = pagerState) {
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
@@ -99,33 +99,38 @@ fun HomeScreen(
                 horizontalArrangement = Arrangement.spacedBy(8.dp),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                items(productList) { data ->
-                    Log.d(
-                        TAG,
-                        "Displaying products for category: ${homeScreenState.category}, Data: $data"
-                    )
-                    bookMarksViewModel.isBookMarked(data.id)
+                if (homeScreenState.isLoading) {
+                    items(8) {
+                        ShimmerScreen()
+
+                    }
+                } else {
+                    items(productList) { data ->
+                        Log.d(
+                            TAG,
+                            "Displaying products for category: ${homeScreenState.category}, Data: $data"
+                        )
+                        bookMarksViewModel.isBookMarked(data.id)
 
 
 
-                    ProductsCard(
-                        product = data,
-                        onSaveClicked = {bookMarksViewModel.toggleButton(data)},
-                        onProductItemClicked = { productId ->
-                            navController.navigate(
-                                AppScreens.DetailScreen.createRoute(productId)
-                            )
+                        ProductsCard(
+                            product = data,
+                            onSaveClicked = { bookMarksViewModel.toggleButton(data) },
+                            onProductItemClicked = { productId ->
+                                navController.navigate(
+                                    AppScreens.DetailScreen.createRoute(productId)
+                                )
 
-                        }
-                    )
+                            }
+                        )
+                    }
                 }
+
             }
 
         }
-
-
     }
-
 }
 
 
