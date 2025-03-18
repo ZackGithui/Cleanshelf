@@ -14,6 +14,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.State
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -26,8 +27,13 @@ import com.example.cleanshelf.presentation.authentication.components.CleanShelfB
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfLabelButton
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfPasswordTextField
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfTextField
+import com.example.cleanshelf.saveOnboardingStatus
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun SignUp(
     modifier: Modifier = Modifier,
@@ -35,6 +41,7 @@ fun SignUp(
     signUpState: State<SignUpState>,
     navController: NavController
 ) {
+    val context = LocalContext.current
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -97,7 +104,9 @@ fun SignUp(
             modifier = modifier
                 .fillMaxWidth(),
             title = "Sign Up",
-            onClick = { viewModel.uiEvents(SignUpEvents.SignUpButtonClicked, navController) }
+            onClick = { viewModel.uiEvents(SignUpEvents.SignUpButtonClicked, navController)
+                GlobalScope.launch { saveOnboardingStatus(context,completed = true) }
+            }
 
         )
 

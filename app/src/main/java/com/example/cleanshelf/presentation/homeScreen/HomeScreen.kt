@@ -26,6 +26,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.cleanshelf.presentation.bookMarks.BookMarksViewModel
 import com.example.cleanshelf.presentation.homeScreen.components.CategoryTab
+import com.example.cleanshelf.presentation.homeScreen.components.ErrorScreen
 import com.example.cleanshelf.presentation.homeScreen.components.ProductsCard
 import com.example.cleanshelf.presentation.homeScreen.components.ShimmerScreen
 import com.example.cleanshelf.presentation.homeScreen.components.TopPart
@@ -89,6 +90,9 @@ fun HomeScreen(
             "pantry staples" -> homeScreenState.pantryStaples
             else -> homeScreenState.all
         }
+        if(homeScreenState.error!!.isNotEmpty()){
+            ErrorScreen()
+        }
 
 
         HorizontalPager(state = pagerState) {
@@ -104,7 +108,7 @@ fun HomeScreen(
                         ShimmerScreen()
 
                     }
-                } else {
+                }  else {
                     items(productList) { data ->
                         Log.d(
                             TAG,

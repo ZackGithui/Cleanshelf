@@ -12,6 +12,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -25,13 +26,19 @@ import com.example.cleanshelf.presentation.authentication.components.CleanShelfB
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfLabelButton
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfPasswordTextField
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfTextField
+import com.example.cleanshelf.saveOnboardingStatus
+import kotlinx.coroutines.DelicateCoroutinesApi
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
+@OptIn(DelicateCoroutinesApi::class)
 @Composable
 fun Login(
     modifier: Modifier = Modifier,
     viewModel: SignInViewModel,
     navController: NavController
 ) {
+    val context = LocalContext.current
     val signState: SignInState = viewModel.signInState.collectAsStateWithLifecycle().value
     Column(
         modifier = modifier
@@ -73,7 +80,10 @@ fun Login(
         CleanShelfButton(
             modifier = modifier.fillMaxWidth(),
             title = "Sign In",
-            onClick = { viewModel.uiEvents(SignInEvents.SignInButtonClicked,navController) }
+            onClick = { viewModel.uiEvents(SignInEvents.SignInButtonClicked,navController)
+            GlobalScope.launch{
+                saveOnboardingStatus(context,completed = true)
+            }}
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfLabelButton(modifier = modifier.fillMaxWidth(),

@@ -80,7 +80,7 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
                     } catch (e: Exception) {
                         _HomeScreenState.value = _HomeScreenState.value.copy(
                             isLoading = false,
-                            error = e.localizedMessage ?: "Unknown error"
+                            error = e.localizedMessage ?: "Unexpected error occurred."
                         )
                     }
                 }
@@ -95,7 +95,7 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
 
 data class HomeScreenState(
     val isLoading: Boolean = false,
-    val error: String = "",
+    val error: String? = "",
     val bakery: List<ProductResponseItem> = emptyList(),
     val pantryStaples: List<ProductResponseItem> = emptyList(),
     val beverages: List<ProductResponseItem> = emptyList(),

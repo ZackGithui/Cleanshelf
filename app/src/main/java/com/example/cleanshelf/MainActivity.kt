@@ -11,7 +11,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -20,7 +24,6 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
-import com.example.cleanshelf.data.local.BookMark
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotPasswordScreen
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotViewModel
 import com.example.cleanshelf.presentation.authentication.signIn.Login
@@ -31,7 +34,6 @@ import com.example.cleanshelf.presentation.bookMarks.BookMarkScreen
 import com.example.cleanshelf.presentation.cart.CartScreen
 import com.example.cleanshelf.presentation.detailScreen.DetailScreen
 import com.example.cleanshelf.presentation.homeScreen.HomeScreen
-import com.example.cleanshelf.presentation.homeScreen.components.TopPart
 import com.example.cleanshelf.presentation.navigation.AppScreens
 import com.example.cleanshelf.presentation.navigation.BottomNavigation
 import com.example.cleanshelf.presentation.search.SearchScreen
@@ -46,14 +48,22 @@ class MainActivity : ComponentActivity() {
         fetchFirebaseToken()
         setContent {
             CleanshelfTheme {
+
                 val navController = rememberNavController()
-              Scaffold(
-                  bottomBar = { BottomNavigation(navController = navController)},
+                val currentRoute = navController.currentBackStackEntryFlow.collectAsState(initial = navController.currentBackStackEntry).value?.destination?.route
 
-              ) {it->
-                  App(navController = navController, modifier = Modifier.padding(it))
-              }
+                val hideBottomBarRoutes = listOf(
+                    AppScreens.SignIn.route,
+                    AppScreens.SignUp.route,
+                    AppScreens.ForgetPassword.route
+                )
+                Scaffold(
+                    bottomBar = { if( currentRoute !in hideBottomBarRoutes)
+                        BottomNavigation(navController = navController) },
 
+                    ) { it ->
+                    App(navController = navController, modifier = Modifier.padding(it))
+                }
 
 
             }
@@ -62,18 +72,29 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun App(navController: NavHostController,modifier: Modifier) {
+fun App(navController: NavHostController, modifier: Modifier) {
+    val context = LocalContext.current
+    val onBoardingStatusFlow = remember { readOnboardingStatus(context) }
+    val onBoardingCompleted by onBoardingStatusFlow.collectAsState(initial = false)
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
 
-        NavHost(navController = navController, startDestination = AppScreens.HomeScreen.route) {
-            composable(AppScreens.HomeScreen.route) {
-                HomeScreen(navController = navController)
+        NavHost(
+            navController = navController,
+            startDestination = if (onBoardingCompleted) AppScreens.HomeScreen.route else AppScreens.SignIn.route
+        ) {
+            composable(AppScreens.SignIn.route) {
+                Login(
+                    viewModel = viewModel<SignInViewModel>(),
+                    navController = navController
+                )
+
 
             }
+
             composable(AppScreens.SignUp.route) {
                 SignUp(
                     viewModel = viewModel<SignUpViewModel>(),
@@ -87,11 +108,8 @@ fun App(navController: NavHostController,modifier: Modifier) {
                     navController = navController
                 )
             }
-            composable(AppScreens.SignIn.route) {
-                Login(
-                    viewModel = viewModel<SignInViewModel>(),
-                    navController = navController
-                )
+            composable(AppScreens.HomeScreen.route) {
+                HomeScreen(navController = navController)
 
 
             }
