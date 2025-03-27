@@ -64,7 +64,7 @@ fun HomeScreen(
 
 
     Column {
-        TopPart()
+        TopPart(navController)
 
         CategoryTab(
             modifier = Modifier.fillMaxWidth(),

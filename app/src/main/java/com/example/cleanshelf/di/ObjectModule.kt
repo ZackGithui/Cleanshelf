@@ -1,9 +1,10 @@
 package com.example.cleanshelf.di
 
 import com.example.cleanshelf.data.remote.Cleanshelf
-import com.example.cleanshelf.data.repository.ProductsRepositoryImpl
-import com.example.cleanshelf.domain.repository.ProductsRepository
+import com.example.cleanshelf.data.remote.MpesaServices
+
 import com.example.cleanshelf.util.BASE_URL
+import com.example.cleanshelf.util.MPESAAPI_BASE_URL
 import com.squareup.moshi.Moshi
 import com.squareup.moshi.kotlin.reflect.KotlinJsonAdapterFactory
 import dagger.Module
@@ -11,6 +12,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import retrofit2.Retrofit
+import retrofit2.awaitResponse
 import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
@@ -43,7 +45,17 @@ object ObjectModule {
         return retrofit.create(Cleanshelf::class.java)
     }
 
+    @Provides
+    @Singleton
+    fun providesMpesaAPI(moshi: Moshi): MpesaServices{
+        return  Retrofit.Builder()
+            .baseUrl(MPESAAPI_BASE_URL)
+            .addConverterFactory(MoshiConverterFactory.create(moshi))
+            .build()
+            .create(MpesaServices::class.java)
+    }
 
 
 
 }
+

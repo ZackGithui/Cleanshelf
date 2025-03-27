@@ -21,13 +21,15 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfButton
 import com.example.cleanshelf.presentation.cart.components.CartItem
 import com.example.cleanshelf.presentation.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 
 @Composable
-fun CartScreen(modifier: Modifier = Modifier) {
+fun CartScreen(modifier: Modifier = Modifier,
+               navController: NavController) {
     val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
     val cartViewModel: CartViewModel = hiltViewModel()
@@ -92,7 +94,7 @@ fun CartScreen(modifier: Modifier = Modifier) {
                 CleanShelfButton(
                     modifier = modifier.fillMaxWidth(),
                     title = "CheckOut",
-                    onClick = {})
+                    onClick = {navController.navigate(AppScreens.CheckOutScreen.route)})
             }
 
         }

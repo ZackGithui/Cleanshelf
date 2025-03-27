@@ -32,10 +32,12 @@ import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotP
 import com.example.cleanshelf.presentation.authentication.forgotPassword.ForgotViewModel
 import com.example.cleanshelf.presentation.authentication.signIn.Login
 import com.example.cleanshelf.presentation.authentication.signIn.SignInViewModel
+import com.example.cleanshelf.presentation.authentication.signOut.SignOutScreen
 import com.example.cleanshelf.presentation.authentication.signUp.SignUp
 import com.example.cleanshelf.presentation.authentication.signUp.SignUpViewModel
 import com.example.cleanshelf.presentation.bookMarks.BookMarkScreen
 import com.example.cleanshelf.presentation.cart.CartScreen
+import com.example.cleanshelf.presentation.checkOut.CheckOutScreen
 import com.example.cleanshelf.presentation.detailScreen.DetailScreen
 import com.example.cleanshelf.presentation.homeScreen.HomeScreen
 import com.example.cleanshelf.presentation.navigation.AppScreens
@@ -129,13 +131,19 @@ fun App(navController: NavHostController, modifier: Modifier) {
                 )
             }
             composable(AppScreens.CartScreen.route) {
-                CartScreen()
+                CartScreen(navController = navController)
             }
             composable(AppScreens.SearchScreen.route) {
                 SearchScreen(navController = navController)
             }
             composable(AppScreens.BookMarks.route) {
                 BookMarkScreen()
+            }
+            composable(AppScreens.CheckOutScreen.route){
+                CheckOutScreen()
+            }
+            composable(AppScreens.SignOut.route){
+                SignOutScreen(navController = navController)
             }
         }
     }

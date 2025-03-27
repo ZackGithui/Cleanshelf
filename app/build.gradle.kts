@@ -68,6 +68,7 @@ dependencies {
     implementation(libs.androidx.room.common)
     implementation(libs.androidx.room.ktx)
     implementation(libs.firebase.auth)
+    implementation(libs.firebase.firestore.ktx)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -123,5 +124,7 @@ dependencies {
     implementation ("com.github.erenalpaslan:removebg:1.0.4")
     //Firebase Messaging
     implementation ("com.google.firebase:firebase-messaging:23.3.1")
+    //implementation ("com.google.firebase:firebase-firestore-ktx:24.10.0")
+    implementation ("com.google.firebase:firebase-storage-ktx:20.3.0")
 
 }

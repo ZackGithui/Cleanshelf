@@ -1,6 +1,7 @@
 package com.example.cleanshelf.presentation.navigation
 
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material.icons.filled.Signpost
 import androidx.compose.material.icons.outlined.AddShoppingCart
 import androidx.compose.material.icons.outlined.BookmarkBorder
@@ -20,6 +21,7 @@ sealed class AppScreens(val route: String,val icon:ImageVector,val title: String
     data object CartScreen : AppScreens("CartScreen",Icons.Outlined.AddShoppingCart,"Cart")
     data object  SearchScreen : AppScreens("SearchScreen",Icons.Outlined.Search,"Search")
     data object  BookMarks : AppScreens("BookMarks",Icons.Outlined.BookmarkBorder,"Bookmark")
-
+    data object CheckOutScreen : AppScreens("CheckOut",Icons.Default.Close,"checkout")
+    data object SignOut : AppScreens("SignOut",Icons.Default.Close,"signOut")
 
 }
