@@ -3,7 +3,6 @@ package com.example.cleanshelf.data.remote
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import com.example.cleanshelf.data.remote.Dto.StkRequest
 import com.example.cleanshelf.data.remote.Dto.StkResponse
-import retrofit2.Call
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -17,7 +16,7 @@ interface Cleanshelf {
     @GET("products")
     suspend fun getAllProducts(): List<ProductResponseItem>
 
-    @GET("products")
+   @GET("products/{category}")
     suspend fun getProductsOnCategory(
         @Query("category") category: String
     ): List<ProductResponseItem>
@@ -25,7 +24,7 @@ interface Cleanshelf {
     @GET("product/{id}")
     suspend fun getProductById(
         @Path ("id") id : Int
-    ): List<ProductResponseItem>
+    ): ProductResponseItem
 
 
 

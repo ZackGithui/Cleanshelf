@@ -1,7 +1,6 @@
 package com.example.cleanshelf.presentation.homeScreen
 
 import android.content.ContentValues.TAG
-import android.media.metrics.Event
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -27,7 +26,7 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
     }
 
 
-    private fun getAllProducts() {
+     fun getAllProducts() {
         viewModelScope.launch {
             try {
 
@@ -35,18 +34,19 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
                 _HomeScreenState.value = _HomeScreenState.value.copy(
                     isLoading = true
                 )
-                val products = repository.getAllProducts().data
+                val products = repository.getAllProducts().data ?: emptyList()
                 _HomeScreenState.value = _HomeScreenState.value.copy(
                     isLoading = false,
-                    all = products!!,
-                    bakery = products!!.filter { it.category.lowercase() == "bakery" },
+                    all = products,
+                    bakery = products.filter { it.category.lowercase() == "bakery" } ,
                     pantryStaples = products.filter { it.category.lowercase() == "pantry staples" },
                     beverages = products.filter { it.category.lowercase() == "beverages" },
                     freshProducts = products.filter { it.category.lowercase() == "fresh products" },
                     dairyProducts = products.filter { it.category.lowercase() == "dairy products" },
                     frozenFood = products.filter { it.category.lowercase() == "frozen food" },
                     cleaning = products.filter { it.category.lowercase() == "cleaning" },
-                    error = ""
+                    error = "",
+
 
                 )
                 Log.d(TAG, "getAllProducts: ${_HomeScreenState.value.dairyProducts}")
@@ -63,30 +63,12 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
         when (event) {
             is Events.CategoryChanged -> {
                 _HomeScreenState.value = _HomeScreenState.value.copy(
-                    category = event.category,
-                    isLoading = true
+                    category = event.category
                 )
-
-                viewModelScope.launch {
-                    try {
-                        val products = repository.getProductsByCategory(event.category)
-
-                        _HomeScreenState.value = _HomeScreenState.value.copy(
-                            all = products.data!!, // Update the product list based on the category
-                            isLoading = false
-                        )
-
-                        Log.d(TAG, "Updated products for category: ${event.category}")
-                    } catch (e: Exception) {
-                        _HomeScreenState.value = _HomeScreenState.value.copy(
-                            isLoading = false,
-                            error = e.localizedMessage ?: "Unexpected error occurred."
-                        )
-                    }
-                }
             }
         }
     }
+
 
 
 

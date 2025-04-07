@@ -37,7 +37,7 @@ fun DetailScreen(
 
 
     // Find the product that matches the productId
-    val product = state.product?.firstOrNull { it.id == productId }
+    val product = state.product
 
     product?.let {
         DetailItem(
@@ -69,7 +69,8 @@ private fun DetailScreenPrev() {
             price = 520,
             unit = "360 g",
             description = "This soft, thin flatbread made from finely ground wholemeal wheat flour. Pair this up with fillings of your choice, for wraps, tacos... let your creativity lead!",
-            image = "https://cdn.mafrservices.com/pim-content/KEN/media/product/42980/1718895604/42980_main.jpg?im=Resize=400"
+            image = "https://cdn.mafrservices.com/pim-content/KEN/media/product/42980/1718895604/42980_main.jpg?im=Resize=400",
+            number = 2
         )
         val navController = rememberNavController()
         DetailScreen(productId = 0, navController = navController)

@@ -24,5 +24,6 @@ data class BookMark(
     val description: String,
     val price: Int,
     val unit : String,
-    val category: String
+    val category: String,
+    val number: Int
 )

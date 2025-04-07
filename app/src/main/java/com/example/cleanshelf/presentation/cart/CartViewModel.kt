@@ -39,6 +39,10 @@ class CartViewModel @Inject constructor( private val productDao: ProductDao): Vi
     fun removeProductFromCart(productEntity: ProductEntity){
         viewModelScope.launch {
             productDao.deleteProducts(productEntity)
+            // Fetch updated cart products from DB and update state
+            productDao.getAllProducts().collect { updatedProducts ->
+                _cartState.value = _cartState.value.copy(products = updatedProducts)
+            }
         }
     }
 

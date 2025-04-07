@@ -37,6 +37,9 @@ fun CartScreen(modifier: Modifier = Modifier,
     LaunchedEffect(AppScreens.CartScreen.route) {
         cartViewModel.getCartProducts()
     }
+
+
+
     Column(modifier = Modifier
         .background(MaterialTheme.colorScheme.background)
         .padding(top =10.dp)) {

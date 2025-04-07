@@ -25,7 +25,7 @@ class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : 
         }
 
 
-    override suspend fun getProductsByCategory(category: String): Resource<List<ProductResponseItem>> =
+   override suspend fun getProductsByCategory(category: String): Resource<List<ProductResponseItem>> =
         try {
             val products = api.getProductsOnCategory(category)
             Resource.Success(products)
@@ -38,7 +38,7 @@ class ProductsRepositoryImpl @Inject constructor(private val api: Cleanshelf) : 
             Resource.Error("An unknown error occurred")
         }
 
-    override suspend fun getProductById(id: Int): Resource<List<ProductResponseItem>> =
+    override suspend fun getProductById(id: Int): Resource<ProductResponseItem> =
         try {
             Log.d(TAG, "Fetching product with ID: $id")
 

@@ -61,7 +61,8 @@ class BookMarksViewModel @Inject constructor(private val bookMarkDao: BookMarkDa
                     description = productResponseItem.description,
                     unit = productResponseItem.unit,
                     price = productResponseItem.price,
-                    category = productResponseItem.category
+                    category = productResponseItem.category,
+                    number = productResponseItem.number
                 )
                 bookMarkDao.updateBookMarks(bookMark) // Make sure you have an `insertBookMark` method
             }

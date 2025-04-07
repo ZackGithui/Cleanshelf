@@ -8,5 +8,5 @@ interface ProductsRepository {
 
     suspend fun getProductsByCategory(category: String): Resource<List<ProductResponseItem>>
 
-    suspend fun getProductById(id: Int): Resource<List<ProductResponseItem>>
+    suspend fun getProductById(id: Int): Resource<ProductResponseItem>
 }

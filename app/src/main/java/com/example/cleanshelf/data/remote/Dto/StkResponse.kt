@@ -13,7 +13,7 @@ data class StkResponse(
     @Json(name = "MerchantRequestID")
     val merchantRequestID: String?,
     @Json(name = "ResponseCode")
-    val responseCode: String?,
+    val responseCode: Int?,
     @Json(name = "ResponseDescription")
     val responseDescription: String?
 )

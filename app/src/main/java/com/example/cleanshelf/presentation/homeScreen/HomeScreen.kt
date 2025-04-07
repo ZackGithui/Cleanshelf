@@ -47,6 +47,7 @@ fun HomeScreen(
     val categories = listOf(
         "All",
         "Bakery",
+        "Beverages",
         "Cleaning",
         "Frozen food",
         "Dairy products",
@@ -84,6 +85,7 @@ fun HomeScreen(
         val productList = when (homeScreenState.category.lowercase()) {
             "bakery" -> homeScreenState.bakery
             "cleaning" -> homeScreenState.cleaning
+            "beverages" -> homeScreenState.beverages
             "frozen food" -> homeScreenState.frozenFood
             "dairy products" -> homeScreenState.dairyProducts
             "fresh products" -> homeScreenState.freshProducts

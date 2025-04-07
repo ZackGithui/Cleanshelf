@@ -16,6 +16,8 @@ data class ProductResponseItem(
     val image: String,
     @Json(name = "name")
     val name: String,
+    @Json(name = "number")
+    val number: Int,
     @Json(name = "price")
     val price: Int,
     @Json(name = "unit")

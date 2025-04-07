@@ -6,7 +6,7 @@ import androidx.room.RoomDatabase
 
 
 @Database(entities = [ProductEntity::class,BookMark::class],
-    version = 4,
+    version = 5,
     exportSchema = false)
 abstract class ProductsDatabaseDatabase : RoomDatabase(){
     abstract fun productDao() : ProductDao

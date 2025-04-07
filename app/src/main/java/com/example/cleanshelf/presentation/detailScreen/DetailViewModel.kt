@@ -36,5 +36,5 @@ class DetailViewModel @Inject constructor(private val repository: ProductsReposi
 
 
 data class DetailState(
-    val product: List<ProductResponseItem>? = null
+    val product: ProductResponseItem? = null
 )

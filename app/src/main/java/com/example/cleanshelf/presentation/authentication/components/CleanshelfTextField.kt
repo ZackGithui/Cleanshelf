@@ -40,7 +40,7 @@ fun CleanShelfTextField(
             Text(
                 text = placeholder,
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
-                color = MaterialTheme.colorScheme.onBackground,
+                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
             )
         },
         colors = color

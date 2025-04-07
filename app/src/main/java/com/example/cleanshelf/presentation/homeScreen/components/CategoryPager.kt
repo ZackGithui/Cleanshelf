@@ -8,7 +8,7 @@ import androidx.compose.ui.Modifier
 @Composable
 fun CategoryPager() {
 
-    val categories = listOf("All","Bakery","Cleaning","Frozen food", "Dairy products","Fresh products","Pantry staples")
+    val categories = listOf("All","Bakery","Beverages","Cleaning","Frozen food", "Dairy products","Fresh products","Pantry staples")
     val pagerState = rememberPagerState(pageCount = {categories.size})
     val coroutineScope = rememberCoroutineScope()
 

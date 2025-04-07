@@ -38,7 +38,9 @@ fun BookMarkScreen(modifier: Modifier = Modifier) {
                         price = bookMark.price,
                         unit = bookMark.unit.toString(),
                         description = "", // Add description if needed
-                        image = bookMark.image
+                        image = bookMark.image,
+                        number = bookMark.number
+
                     )
                     bookMarksViewModel.toggleButton(productResponseItem) // Pass BookMark object instead
                 }
