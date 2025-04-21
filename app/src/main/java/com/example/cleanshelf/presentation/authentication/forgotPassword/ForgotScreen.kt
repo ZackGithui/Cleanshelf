@@ -52,7 +52,8 @@ fun ForgotPasswordScreen(
         CleanShelfTextField(
             value = forgotState.value.email,
             onValueChange = { viewModel.forgotUiEvents(ForgotEvents.EmailChanged(it),navController) },
-            placeholder = "Email"
+            placeholder = "Email",
+            errorMessage = forgotState.value.errorMessage
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfButton(

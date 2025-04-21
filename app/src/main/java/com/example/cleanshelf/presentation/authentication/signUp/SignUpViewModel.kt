@@ -1,18 +1,12 @@
 package com.example.cleanshelf.presentation.authentication.signUp
 
-import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.cleanshelf.presentation.authentication.firebaseAuth.AuthViewModel
 import com.example.cleanshelf.presentation.navigation.AppScreens
-import com.example.cleanshelf.saveOnboardingStatus
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
-
-
 
 
 class SignUpViewModel : ViewModel() {
@@ -20,7 +14,6 @@ class SignUpViewModel : ViewModel() {
     private val _signUpState: MutableStateFlow<SignUpState> = MutableStateFlow(SignUpState())
     val signUpState = _signUpState.asStateFlow()
     private val auth = AuthViewModel()
-
 
 
     fun uiEvents(events: SignUpEvents, navController: NavController) {
@@ -32,15 +25,33 @@ class SignUpViewModel : ViewModel() {
             }
 
             SignUpEvents.SignUpButtonClicked -> {
+                val current = _signUpState.value
+                val nameError = if (current.username.isBlank()) "Username required" else null
+                val emailError = if (!current.email.contains("@")) "Invalid email" else null
+                val passwordError =
+                    if (current.password.length < 6) "Password must be at least six characters" else null
 
-                auth.signUp(
-                    _signUpState.value.username,
-                    _signUpState.value.email,
-                    _signUpState.value.password,
-                    navController
-                )
+                if (nameError != null || emailError != null || passwordError != null) {
+                    _signUpState.value = _signUpState.value.copy(
+                        usernameErrorMessage = nameError,
+                        emailErrorMessage = emailError,
+                        passwordErrorMessage = passwordError
+                    )
 
-                //authViewModel.signUp(_signUpState.value.username,_signUpState.value.email,_signUpState.value.password)
+                } else {
+
+
+                    auth.signUp(
+
+
+                        _signUpState.value.username,
+                        _signUpState.value.email,
+                        _signUpState.value.password,
+                        navController
+                    )
+
+                    //authViewModel.signUp(_signUpState.value.username,_signUpState.value.email,_signUpState.value.password)
+                }
             }
 
             is SignUpEvents.UserEmailChanged -> {

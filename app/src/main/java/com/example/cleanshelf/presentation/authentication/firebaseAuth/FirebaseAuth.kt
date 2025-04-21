@@ -8,6 +8,7 @@ import androidx.navigation.NavController
 import com.example.cleanshelf.presentation.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.runBlocking
 
 class AuthViewModel : ViewModel() {
 
@@ -27,26 +28,9 @@ class AuthViewModel : ViewModel() {
         } else _authState.value = AuthState.Authenticated
     }
 
-    fun login(email: String, password: String, navController: NavController) {
+    suspend fun login(email: String, password: String) :Result<Unit> =
+        runCatching { auth.signInWithEmailAndPassword(email, password) }
 
-        if (email.isEmpty() || password.isEmpty()) {
-            _authState.value =
-                AuthState.Error("Email or password cannot be empty")
-            return
-        }
-        auth.signInWithEmailAndPassword(email, password).addOnCompleteListener { task ->
-            if (task.isSuccessful) {
-                _authState.value = AuthState.Authenticated
-                navController.navigate(AppScreens.HomeScreen.route) {
-                    popUpTo(AppScreens.SignIn.route) {
-                        inclusive = true
-                    }
-                }
-            } else _authState.value =
-                AuthState.Error(task.exception?.message ?: "Something went wrong")
-
-        }
-    }
 
     fun signUp(name: String, email: String, password: String, navController: NavController) {
 

@@ -61,6 +61,7 @@ fun SignUp(
             value = signUpState.value.username,
             onValueChange = { viewModel.uiEvents(SignUpEvents.UserNameChanged(it), navController) },
             placeholder = "Username",
+            errorMessage = signUpState.value.usernameErrorMessage
 
             )
         Spacer(modifier = Modifier.height(20.dp))
@@ -72,7 +73,8 @@ fun SignUp(
                     navController
                 )
             },
-            placeholder = "Email"
+            placeholder = "Email",
+            errorMessage = signUpState.value.emailErrorMessage
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfPasswordTextField(
@@ -90,7 +92,8 @@ fun SignUp(
                 )
             },
             placeholder = "Password",
-            isPasswordVisible = signUpState.value.viewPassword
+            isPasswordVisible = signUpState.value.viewPassword,
+            errorMessage = signUpState.value.passwordErrorMessage
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfLabelButton(
@@ -104,7 +107,9 @@ fun SignUp(
             modifier = modifier
                 .fillMaxWidth(),
             title = "Sign Up",
-            onClick = { viewModel.uiEvents(SignUpEvents.SignUpButtonClicked, navController)
+            onClick = {
+
+                viewModel.uiEvents(SignUpEvents.SignUpButtonClicked, navController)
                 GlobalScope.launch { saveOnboardingStatus(context,completed = true) }
             }
 

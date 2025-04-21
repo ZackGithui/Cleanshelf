@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.style.TextAlign
@@ -36,10 +37,16 @@ import kotlinx.coroutines.launch
 fun Login(
     modifier: Modifier = Modifier,
     viewModel: SignInViewModel,
-    navController: NavController
+    navController: NavController,
+
 ) {
     val context = LocalContext.current
     val signState: SignInState = viewModel.signInState.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+
+
+    }
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -58,7 +65,8 @@ fun Login(
         CleanShelfTextField(
             value = signState.email,
             onValueChange = { viewModel.uiEvents(SignInEvents.EmailChanged(it), navController) },
-            placeholder = "Email"
+            placeholder = "Email",
+            errorMessage = signState.emailError
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfPasswordTextField(
@@ -66,7 +74,8 @@ fun Login(
             onValueChange = { viewModel.uiEvents(SignInEvents.PasswordChanged(it),navController) },
             placeholder = "Password",
             onTrailingIconClicked = { viewModel.uiEvents(SignInEvents.ViewPassword,navController)},
-            isPasswordVisible = signState.viewPassword
+            isPasswordVisible = signState.viewPassword,
+            errorMessage = signState.emailError
 
         )
         Spacer(modifier = Modifier.height(20.dp))

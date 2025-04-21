@@ -25,6 +25,7 @@ fun CleanShelfTextField(
     value: String = "",
     onValueChange: (String) -> Unit = {},
     placeholder: String = "",
+    errorMessage: String? = null,
     color: TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.primary
     )
@@ -34,6 +35,7 @@ fun CleanShelfTextField(
         singleLine = true,
         value = value,
         onValueChange = onValueChange,
+        isError = errorMessage != null,
         textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
         shape = MaterialTheme.shapes.large,
         placeholder = {
@@ -42,6 +44,16 @@ fun CleanShelfTextField(
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
                 color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
             )
+        },
+        supportingText = {
+            errorMessage?.let { msg ->
+                Text(
+                    text = msg,
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                    color = MaterialTheme.colorScheme.error
+                )
+
+            }
         },
         colors = color
     )
@@ -57,6 +69,7 @@ fun CleanShelfPasswordTextField(
     modifier: Modifier = Modifier,
     isPasswordVisible: Boolean = false,
     placeholder: String = "",
+    errorMessage: String?= null,
     onTrailingIconClicked: () -> Unit,
     colors: TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.primary
@@ -67,6 +80,7 @@ fun CleanShelfPasswordTextField(
     OutlinedTextField(
         value = value,
         onValueChange = onValueChange,
+        isError = errorMessage != null,
         modifier = modifier.fillMaxWidth(),
         singleLine = true,
         textStyle = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
@@ -78,9 +92,16 @@ fun CleanShelfPasswordTextField(
                 color = MaterialTheme.colorScheme.onBackground,
             )
         },
+        supportingText = {
+                         errorMessage?.let { msg->
+                             Text(text = msg,
+                                 color= MaterialTheme.colorScheme.error,
+                                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp))
+                         }
+        },
 
         trailingIcon = {
-            IconButton(onClick =  onTrailingIconClicked ) {
+            IconButton(onClick = onTrailingIconClicked) {
                 Icon(
                     imageVector = if (isPasswordVisible) Icons.Rounded.Visibility else Icons.Rounded.VisibilityOff,
                     contentDescription = if (isPasswordVisible) "Hide password" else "Show password"
