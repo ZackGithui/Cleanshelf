@@ -57,14 +57,7 @@ fun SignUp(
             color = MaterialTheme.colorScheme.onBackground
         )
         Spacer(modifier = Modifier.height(20.dp))
-        CleanShelfTextField(
-            value = signUpState.value.username,
-            onValueChange = { viewModel.uiEvents(SignUpEvents.UserNameChanged(it), navController) },
-            placeholder = "Username",
-            errorMessage = signUpState.value.usernameErrorMessage
 
-            )
-        Spacer(modifier = Modifier.height(20.dp))
         CleanShelfTextField(
             value = signUpState.value.email,
             onValueChange = {
@@ -96,6 +89,26 @@ fun SignUp(
             errorMessage = signUpState.value.passwordErrorMessage
         )
         Spacer(modifier = Modifier.height(20.dp))
+
+        CleanShelfPasswordTextField(
+            value = signUpState.value.confirmPassword,
+            onValueChange = {
+                viewModel.uiEvents(
+                    SignUpEvents.ConfirmPasswordChanged(it),
+                    navController
+                )
+            },
+            onTrailingIconClicked = {
+                viewModel.uiEvents(
+                    SignUpEvents.VisibilityToggled,
+                    navController
+                )
+            },
+            placeholder = "Confirm Password",
+            isPasswordVisible = signUpState.value.viewPassword,
+            errorMessage = signUpState.value.confirmPasswordErrorMessage
+        )
+        Spacer(modifier = Modifier.height(20.dp))
         CleanShelfLabelButton(
             modifier = Modifier.fillMaxWidth(),
             unClickableText = "Already have an account?",
@@ -110,7 +123,7 @@ fun SignUp(
             onClick = {
 
                 viewModel.uiEvents(SignUpEvents.SignUpButtonClicked, navController)
-                GlobalScope.launch { saveOnboardingStatus(context,completed = true) }
+                GlobalScope.launch { saveOnboardingStatus(context, completed = true) }
             }
 
         )

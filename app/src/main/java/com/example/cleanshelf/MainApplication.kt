@@ -7,3 +7,4 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 
 @HiltAndroidApp
 class MainApplication : Application()
+

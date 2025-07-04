@@ -1,9 +1,8 @@
 package com.example.cleanshelf
 
-import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
-import androidx.activity.SystemBarStyle
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.background
@@ -13,13 +12,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.Scaffold
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
-import androidx.core.view.WindowCompat
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
@@ -37,6 +36,8 @@ import com.example.cleanshelf.presentation.authentication.signUp.SignUp
 import com.example.cleanshelf.presentation.authentication.signUp.SignUpViewModel
 import com.example.cleanshelf.presentation.bookMarks.BookMarkScreen
 import com.example.cleanshelf.presentation.cart.CartScreen
+import com.example.cleanshelf.presentation.cart.DealsScreen
+import com.example.cleanshelf.presentation.cart.OrderScreen
 import com.example.cleanshelf.presentation.checkOut.CheckOutScreen
 import com.example.cleanshelf.presentation.detailScreen.DetailScreen
 import com.example.cleanshelf.presentation.homeScreen.HomeScreen
@@ -51,56 +52,78 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
+
         fetchFirebaseToken()
         installSplashScreen()
+
+        val targetScreen = intent?.getStringExtra("screen")
+        Log.d("FCM_INTENT", "Screen from intent: $targetScreen")
+
         setContent {
             CleanshelfTheme {
                 val navController = rememberNavController()
-                val currentRoute = navController.currentBackStackEntryFlow.collectAsState(initial = navController.currentBackStackEntry).value?.destination?.route
+                val currentRoute = navController.currentBackStackEntryFlow
+                    .collectAsState(initial = navController.currentBackStackEntry).value?.destination?.route
 
                 val hideBottomBarRoutes = listOf(
                     AppScreens.SignIn.route,
                     AppScreens.SignUp.route,
                     AppScreens.ForgetPassword.route
                 )
+
                 Scaffold(
-                    bottomBar = { if( currentRoute !in hideBottomBarRoutes)
-                        BottomNavigation(navController = navController) },
-
-                    ) { it ->
-                    App(navController = navController, modifier = Modifier.padding(it))
+                    bottomBar = {
+                        if (currentRoute !in hideBottomBarRoutes) {
+                            BottomNavigation(navController = navController)
+                        }
+                    }
+                ) { padding ->
+                    App(
+                        navController = navController,
+                        modifier = Modifier.padding(padding),
+                        startScreen = targetScreen
+                    )
                 }
-
-
             }
         }
     }
 }
 
 @Composable
-fun App(navController: NavHostController, modifier: Modifier) {
+fun App(
+    navController: NavHostController,
+    modifier: Modifier,
+    startScreen: String? = null
+) {
     val context = LocalContext.current
     val onBoardingStatusFlow = remember { readOnboardingStatus(context) }
     val onBoardingCompleted by onBoardingStatusFlow.collectAsState(initial = false)
+
+    val startDestination = if (onBoardingCompleted) {
+        AppScreens.HomeScreen.route
+    } else {
+        AppScreens.HomeScreen.route
+    }
+
+    // Handle screen navigation from FCM
+    LaunchedEffect(startScreen) {
+        if (!startScreen.isNullOrBlank() && startScreen != startDestination) {
+            navController.navigate(startScreen)
+        }
+    }
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-
         NavHost(
             navController = navController,
-            startDestination = if (onBoardingCompleted) AppScreens.HomeScreen.route else AppScreens.SignIn.route
+            startDestination = startDestination
         ) {
             composable(AppScreens.SignIn.route) {
-                Login(
-                    viewModel = viewModel<SignInViewModel>(),
-                    navController = navController
-                )
-
-
+                Login(viewModel = viewModel<SignInViewModel>(), navController = navController)
             }
-
             composable(AppScreens.SignUp.route) {
                 SignUp(
                     viewModel = viewModel<SignUpViewModel>(),
@@ -116,8 +139,6 @@ fun App(navController: NavHostController, modifier: Modifier) {
             }
             composable(AppScreens.HomeScreen.route) {
                 HomeScreen(navController = navController)
-
-
             }
             composable(
                 route = AppScreens.DetailScreen.route,
@@ -127,11 +148,13 @@ fun App(navController: NavHostController, modifier: Modifier) {
                 DetailScreen(
                     productId = productId ?: 1,
                     navController = navController
-
                 )
             }
             composable(AppScreens.CartScreen.route) {
                 CartScreen(navController = navController)
+            }
+            composable(AppScreens.DealsScreen.route) {
+                DealsScreen(navController = navController)
             }
             composable(AppScreens.SearchScreen.route) {
                 SearchScreen(navController = navController)
@@ -139,11 +162,14 @@ fun App(navController: NavHostController, modifier: Modifier) {
             composable(AppScreens.BookMarks.route) {
                 BookMarkScreen()
             }
-            composable(AppScreens.CheckOutScreen.route){
-                CheckOutScreen()
+            composable(AppScreens.CheckOutScreen.route) {
+                CheckOutScreen(navController = navController)
             }
-            composable(AppScreens.SignOut.route){
+            composable(AppScreens.SignOut.route) {
                 SignOutScreen(navController = navController)
+            }
+            composable(AppScreens.OrderScreen.route) {
+                OrderScreen()
             }
         }
     }

@@ -18,8 +18,10 @@ data class ProductResponseItem(
     val name: String,
     @Json(name = "number")
     val number: Int,
-    @Json(name = "price")
+    @Json(name = "originalPrice")
     val price: Int,
+    @Json(name = "discountedPrice")
+    val discountedPrice: Double,
     @Json(name = "unit")
     val unit: String
 )

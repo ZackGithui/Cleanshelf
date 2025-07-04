@@ -26,37 +26,40 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
     }
 
 
-     fun getAllProducts() {
+    fun getAllProducts() {
         viewModelScope.launch {
             try {
 
 
                 _HomeScreenState.value = _HomeScreenState.value.copy(
-                    isLoading = true
+                    isLoading = true,
+                    error = ""
                 )
                 val products = repository.getAllProducts().data ?: emptyList()
+                Log.d(TAG, "getAllProductsVM: $products")
+
+                val groupedByCategory = products.groupBy { it.category.trim().lowercase() }
                 _HomeScreenState.value = _HomeScreenState.value.copy(
                     isLoading = false,
                     all = products,
-                    bakery = products.filter { it.category.lowercase() == "bakery" } ,
-                    pantryStaples = products.filter { it.category.lowercase() == "pantry staples" },
-                    beverages = products.filter { it.category.lowercase() == "beverages" },
-                    freshProducts = products.filter { it.category.lowercase() == "fresh products" },
-                    dairyProducts = products.filter { it.category.lowercase() == "dairy products" },
-                    frozenFood = products.filter { it.category.lowercase() == "frozen food" },
-                    cleaning = products.filter { it.category.lowercase() == "cleaning" },
+                    productByCategory = groupedByCategory,
                     error = "",
 
 
-                )
-                Log.d(TAG, "getAllProducts: ${_HomeScreenState.value.dairyProducts}")
+                    )
+                Log.d(TAG, "getAllProducts: ${_HomeScreenState.value.all}")
             } catch (e: Exception) {
                 _HomeScreenState.value = _HomeScreenState.value.copy(
                     isLoading = false,
-                    error = repository.getAllProducts().message ?: e.localizedMessage
+                    error = e.localizedMessage ?: "Unknown error occurred"
                 )
             }
+
         }
+    }
+
+    fun getProductsByCategory(category: String): List<ProductResponseItem> {
+        return _HomeScreenState.value.productByCategory[category.lowercase()] ?: emptyList()
     }
 
     fun onEvents(event: Events) {
@@ -70,23 +73,15 @@ class HomeScreenViewmodel @Inject constructor(private val repository: ProductsRe
     }
 
 
-
-
 }
 
 
 data class HomeScreenState(
     val isLoading: Boolean = false,
     val error: String? = "",
-    val bakery: List<ProductResponseItem> = emptyList(),
-    val pantryStaples: List<ProductResponseItem> = emptyList(),
-    val beverages: List<ProductResponseItem> = emptyList(),
-    val freshProducts: List<ProductResponseItem> = emptyList(),
-    val dairyProducts: List<ProductResponseItem> = emptyList(),
-    val frozenFood: List<ProductResponseItem> = emptyList(),
-    val cleaning: List<ProductResponseItem> = emptyList(),
+    val productByCategory: Map<String, List<ProductResponseItem>> = emptyMap(),
     val all: List<ProductResponseItem> = emptyList(),
-    val category: String = "bakery"
+    val category: String = ""
 )
 
 sealed class Events {

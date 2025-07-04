@@ -81,7 +81,7 @@ class SignInViewModel() : ViewModel() {
             }
 
             SignInEvents.OnSuccess -> {
-                navController.navigate(AppScreens.HomeScreen.route) {
+                navController.navigate(AppScreens.CartScreen.route) {
                     popUpTo(AppScreens.SignIn.route) { inclusive = true }
 
                 }

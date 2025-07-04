@@ -68,13 +68,22 @@ fun TopPart(navController: NavController) {
     ) {
         val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
-        auth.currentUser?.displayName?.let {
-            Text(
-                text = "Welcome, $it! ",
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
-        }
+       if(auth.currentUser?.displayName?.isNotBlank() == true) {
+           auth.currentUser?.email.let {
+               Text(
+                   text = "Welcome, ${it?.substringBefore('@')}",
+                   style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp),
+                   color = MaterialTheme.colorScheme.onBackground
+               )
+           }
+       }
+        else{
+           Text(
+               text = "Welcome, User!",
+               style = MaterialTheme.typography.bodyLarge.copy(fontSize = 22.sp),
+               color = MaterialTheme.colorScheme.onBackground
+           )
+       }
 
 
         /* Image(

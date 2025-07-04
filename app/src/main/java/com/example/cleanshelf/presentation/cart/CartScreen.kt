@@ -1,5 +1,7 @@
 package com.example.cleanshelf.presentation.cart
 
+import android.util.Log
+import android.widget.Toast
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -17,6 +19,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -27,29 +30,35 @@ import com.example.cleanshelf.presentation.cart.components.CartItem
 import com.example.cleanshelf.presentation.navigation.AppScreens
 import com.google.firebase.auth.FirebaseAuth
 
-@Composable
-fun CartScreen(modifier: Modifier = Modifier,
-               navController: NavController) {
-    val auth: FirebaseAuth = FirebaseAuth.getInstance()
 
+@Composable
+fun CartScreen(
+    modifier: Modifier = Modifier,
+    navController: NavController
+) {
+    val context = LocalContext.current
+
+    val orderViewModel : OrderViewModel = hiltViewModel()
+    val auth = FirebaseAuth.getInstance()
     val cartViewModel: CartViewModel = hiltViewModel()
     val cartState = cartViewModel.cartState.collectAsStateWithLifecycle().value
-    LaunchedEffect(AppScreens.CartScreen.route) {
-        cartViewModel.getCartProducts()
+
+    LaunchedEffect(Unit) {
+        cartViewModel.getCartFromServer()
     }
 
-
-
-    Column(modifier = Modifier
-        .background(MaterialTheme.colorScheme.background)
-        .padding(top =10.dp)) {
+    Column(
+        modifier = Modifier
+            .background(MaterialTheme.colorScheme.background)
+            .padding(top = 10.dp)
+    ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .padding(top=20.dp)
                 .padding(vertical = 20.dp, horizontal = 10.dp)
+                .padding(top = 20.dp)
         ) {
-            val name = auth.currentUser?.displayName
+            val name = auth.currentUser?.email
 
             if (name != null) {
                 Text(
@@ -58,7 +67,6 @@ fun CartScreen(modifier: Modifier = Modifier,
                     color = MaterialTheme.colorScheme.onBackground
                 )
             }
-
         }
         Divider()
 
@@ -69,16 +77,12 @@ fun CartScreen(modifier: Modifier = Modifier,
                 .padding(top = 10.dp)
         ) {
 
-
-            items(cartState.products ?: emptyList()) { product ->
+            items(cartState.products ?: emptyList()) { cartItem ->
                 Spacer(modifier = Modifier.height(5.dp))
-                CartItem(productEntity = product)
-
-
+                CartItem(cartItem = cartItem)  // Pass CartItem (not ProductEntity)
             }
 
             item {
-
                 Spacer(modifier = Modifier.height(20.dp))
 
                 Row(
@@ -97,10 +101,13 @@ fun CartScreen(modifier: Modifier = Modifier,
                 CleanShelfButton(
                     modifier = modifier.fillMaxWidth(),
                     title = "CheckOut",
-                    onClick = {navController.navigate(AppScreens.CheckOutScreen.route)})
-            }
+                    onClick = {
 
+                                navController.navigate(AppScreens.CheckOutScreen.route)
+
+                    }
+                )
+            }
         }
     }
-
 }

@@ -63,11 +63,13 @@ fun Login(
         )
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfTextField(
+            modifier = Modifier.fillMaxWidth(),
             value = signState.email,
             onValueChange = { viewModel.uiEvents(SignInEvents.EmailChanged(it), navController) },
             placeholder = "Email",
             errorMessage = signState.emailError
         )
+
         Spacer(modifier = Modifier.height(20.dp))
         CleanShelfPasswordTextField(
             value = signState.password,

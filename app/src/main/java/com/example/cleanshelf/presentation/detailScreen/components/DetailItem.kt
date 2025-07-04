@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import com.example.cleanshelf.data.local.ProductEntity
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
+import com.example.cleanshelf.domain.cart.CartItem
 import com.example.cleanshelf.presentation.authentication.components.CleanShelfButton
 import com.example.cleanshelf.presentation.cart.CartViewModel
 import com.example.cleanshelf.presentation.navigation.AppScreens
@@ -29,70 +30,71 @@ import com.example.cleanshelf.presentation.navigation.AppScreens
 fun DetailItem(
     modifier: Modifier = Modifier,
     productResponseItem: List<ProductResponseItem>,
-    productEntity: ProductEntity,
+    cartItem: com.example.cleanshelf.data.remote.Dto.CartItem,
     navController: NavController
 ) {
     val cartViewModel: CartViewModel = hiltViewModel()
+
     LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background)
     ) {
-        items(productResponseItem) { productResponseItem ->
+        items(productResponseItem) { product ->
             Holder(
                 modifier = modifier
                     .height(400.dp)
                     .fillMaxWidth(),
-                image = productResponseItem.image,
+                image = product.image,
                 onClick = {}
             )
+
             Spacer(modifier = Modifier.height(20.dp))
 
-            Column(
-                modifier = Modifier.padding(horizontal = 15.dp)
-            ) {
+            Column(modifier = Modifier.padding(horizontal = 15.dp)) {
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween
                 ) {
                     Text(
-                        text = productResponseItem.name,
+                        text = product.name,
                         style = MaterialTheme.typography.bodyLarge.copy(fontSize = 23.sp)
                             .copy(color = MaterialTheme.colorScheme.onBackground)
                     )
-
                     Text(
-                        text = productResponseItem.unit,
+                        text = product.unit,
                         style = MaterialTheme.typography.bodyLarge.copy(fontSize = 23.sp)
                             .copy(color = MaterialTheme.colorScheme.onBackground)
                     )
-
                 }
+
                 Spacer(modifier = Modifier.height(20.dp))
+
                 Text(
-                    text = "Ksh. ${productResponseItem.price.toString()}",
+                    text = "Ksh. ${product.price}",
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp)
                         .copy(color = MaterialTheme.colorScheme.onBackground)
                 )
+
                 Spacer(modifier = Modifier.height(10.dp))
 
                 Text(
-                    text = productResponseItem.description,
+                    text = product.description,
                     style = MaterialTheme.typography.bodyLarge.copy(fontSize = 19.sp)
                         .copy(color = MaterialTheme.colorScheme.onBackground)
                 )
+
                 Spacer(modifier = Modifier.height(20.dp))
 
-
-                CleanShelfButton(title = "Add to Cart", onClick = {
-                    cartViewModel.addProductToCart(productEntity)
-                    navController.navigate(AppScreens.CartScreen.route)
-                }, modifier = Modifier.fillMaxWidth())
-
+                CleanShelfButton(
+                    title = "Add to Cart",
+                    onClick = {
+                        cartViewModel.addToCart(cartItem)
+                        navController.navigate(AppScreens.CartScreen.route)
+                    },
+                    modifier = Modifier.fillMaxWidth()
+                )
             }
-
         }
-
     }
-
 }

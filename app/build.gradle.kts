@@ -69,6 +69,7 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.firebase.auth)
     implementation(libs.firebase.firestore.ktx)
+    //implementation(libs.androidx.navigation.runtime.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -92,7 +93,7 @@ dependencies {
 
     // Room
     implementation("androidx.room:room-ktx:2.6.1")
-    kapt("androidx.room:room-compiler:2.6.1")
+    ksp("androidx.room:room-compiler:2.6.1")
     implementation("androidx.room:room-paging:2.6.1")
 
 //firebase
@@ -118,13 +119,21 @@ dependencies {
     //coil
     implementation("io.coil-kt:coil-compose:2.6.0")
     //Accompanist
-    implementation ("com.google.accompanist:accompanist-pager:0.32.0")
-    implementation ("com.google.accompanist:accompanist-pager-indicators:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager:0.32.0")
+    implementation("com.google.accompanist:accompanist-pager-indicators:0.32.0")
     //Background remover
-    implementation ("com.github.erenalpaslan:removebg:1.0.4")
+    implementation("com.github.erenalpaslan:removebg:1.0.4")
     //Firebase Messaging
-    implementation ("com.google.firebase:firebase-messaging:23.3.1")
+    implementation("com.google.firebase:firebase-messaging:23.3.1")
     //implementation ("com.google.firebase:firebase-firestore-ktx:24.10.0")
-    implementation ("com.google.firebase:firebase-storage-ktx:20.3.0")
+    implementation("com.google.firebase:firebase-storage-ktx:20.3.0")
+    //Test
+    testImplementation("junit:junit:4.13.2")
+    testImplementation("io.mockk:mockk:1.13.5")
+    testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.3")
+    testImplementation("com.google.truth:truth:1.1.3")
+    //Timber
+    implementation("com.jakewharton.timber:timber:5.0.1")
+
 
 }

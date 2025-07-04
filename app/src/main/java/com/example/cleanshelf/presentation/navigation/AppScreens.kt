@@ -23,5 +23,9 @@ sealed class AppScreens(val route: String,val icon:ImageVector,val title: String
     data object  BookMarks : AppScreens("BookMarks",Icons.Outlined.BookmarkBorder,"Bookmark")
     data object CheckOutScreen : AppScreens("CheckOut",Icons.Default.Close,"checkout")
     data object SignOut : AppScreens("SignOut",Icons.Default.Close,"signOut")
+    data object OrderScreen : AppScreens("OrderScreen",Icons.Default.Close,"Order")
+    data object DealsScreen : AppScreens("deals_screen",Icons.Default.Close,"Deals")
+
+
 
 }

@@ -7,6 +7,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -17,16 +18,20 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowRightAlt
 import androidx.compose.material3.Button
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
@@ -100,25 +105,26 @@ fun SignOutScreen(
                 painter = rememberAsyncImagePainter(profilePictureUri),
                 contentDescription = "image",
                 contentScale = ContentScale.Crop,
+
                 modifier = Modifier
                     .size(100.dp)
                     .clip(CircleShape)
                     .background(Color.Gray)
                     .clickable {
                         imagePicker.launch("image/*")
-
+                        var onClick = { updateProfile(profilePictureUri, fireStore, user, context) }
 
                     },
 
 
                 )
             Spacer(modifier = Modifier.width(60.dp))
-            Row (verticalAlignment = Alignment.Bottom,
-                ){
-                Button(onClick = { updateProfile(profilePictureUri, fireStore, user, context) }) {
-                    Text("Update")
-                }
-            }
+            /* Row (verticalAlignment = Alignment.Bottom,
+                 ){
+                 Button(onClick = { updateProfile(profilePictureUri, fireStore, user, context) }) {
+                     Text("Update")
+                 }
+             }*/
 
 
         }
@@ -128,9 +134,9 @@ fun SignOutScreen(
 
 
         // Name Field
-        auth.currentUser?.displayName?.let {
+        auth.currentUser?.email?.let {
             Text(
-                text = it,
+                text = it.substringBefore('@') ?:"User",
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 23.sp),
                 color = MaterialTheme.colorScheme.onBackground
             )
@@ -145,7 +151,41 @@ fun SignOutScreen(
             )
         }
 
-        Spacer(modifier = Modifier.height(19.dp))
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            TextButton(
+                onClick = { navController.navigate(AppScreens.OrderScreen.route) }
+            ) {
+                Text(
+                    text = "Orders",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 21.sp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(12.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            TextButton(
+                onClick = { navController.navigate(AppScreens.DealsScreen.route) }
+            ) {
+                Text(
+                    text = "Offers",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 21.sp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            }
+        }
+
+
 
         // Sign Out Button
         CleanShelfButton(

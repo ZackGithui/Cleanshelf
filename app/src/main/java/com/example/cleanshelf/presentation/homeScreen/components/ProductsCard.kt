@@ -1,8 +1,8 @@
 package com.example.cleanshelf.presentation.homeScreen.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -28,14 +28,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.cleanshelf.data.remote.Dto.ProductResponseItem
 import com.example.cleanshelf.presentation.bookMarks.BookMarksViewModel
-import com.example.cleanshelf.ui.theme.CleanshelfTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -45,7 +44,8 @@ fun ProductsCard(
     onProductItemClicked: (Int) -> Unit
 ) {
     val bookMarksViewModel: BookMarksViewModel = hiltViewModel()
-    val isFavouriteSet = bookMarksViewModel.isFavourite.observeAsState(emptySet()).value // Observe bookmarked IDs
+    val isFavouriteSet =
+        bookMarksViewModel.isFavourite.observeAsState(emptySet()).value // Observe bookmarked IDs
 
     // Ensure isBookMarked() is called only once per product ID
     LaunchedEffect(product.id) {
@@ -125,11 +125,34 @@ fun ProductsCard(
                 .padding(horizontal = 5.dp),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "Ksh. ${product.price}",
-                style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
-                color = MaterialTheme.colorScheme.onBackground
-            )
+            if (product.price.toDouble() == product.discountedPrice) {
+                Text(
+                    text = "Ksh. ${product.price}",
+                    style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                    color = MaterialTheme.colorScheme.onBackground
+                )
+            } else {
+                Column {
+                    Text(
+                        text = " Price: Ksh. ${product.price}",
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            fontSize = 18.sp,
+                            textDecoration = TextDecoration.LineThrough
+                        ),
+                        color = MaterialTheme.colorScheme.onBackground,
+
+
+                        )
+                    Text(
+                        text = "D. price: Ksh. ${product.discountedPrice}",
+                        style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),
+                        color = MaterialTheme.colorScheme.onBackground
+                    )
+                }
+
+            }
+
+
             Text(
                 text = product.unit,
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 18.sp),

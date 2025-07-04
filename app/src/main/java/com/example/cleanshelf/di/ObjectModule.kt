@@ -1,7 +1,9 @@
 package com.example.cleanshelf.di
 
+import com.example.cleanshelf.data.remote.CartApiService
 import com.example.cleanshelf.data.remote.Cleanshelf
 import com.example.cleanshelf.data.remote.MpesaServices
+import com.example.cleanshelf.data.remote.OrderApiService
 
 import com.example.cleanshelf.util.BASE_URL
 import com.example.cleanshelf.util.MPESAAPI_BASE_URL
@@ -28,12 +30,12 @@ object ObjectModule {
             .add(KotlinJsonAdapterFactory())
             .build()
     }
-
+    private val BaseUrl = BASE_URL.trim().replace(" ", "")
     @Provides
     @Singleton
     fun provideRetrofit(moshi: Moshi): Retrofit {
         return Retrofit.Builder()
-            .baseUrl(BASE_URL)
+            .baseUrl(BaseUrl)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
 
@@ -45,16 +47,29 @@ object ObjectModule {
         return retrofit.create(Cleanshelf::class.java)
     }
 
+    val sanitizedBaseUrl = MPESAAPI_BASE_URL.trim().replace(" ", "")
+
+
     @Provides
     @Singleton
     fun providesMpesaAPI(moshi: Moshi): MpesaServices{
         return  Retrofit.Builder()
-            .baseUrl(MPESAAPI_BASE_URL)
+            .baseUrl(sanitizedBaseUrl)
             .addConverterFactory(MoshiConverterFactory.create(moshi))
             .build()
             .create(MpesaServices::class.java)
     }
+    @Singleton
+    @Provides
+    fun provideCartApiService(retrofit: Retrofit): CartApiService {
+        return retrofit.create(CartApiService::class.java)
+    }
 
+    @Singleton
+    @Provides
+    fun createOrderService(retrofit: Retrofit): OrderApiService {
+        return retrofit.create(OrderApiService::class.java)
+    }
 
 
 }

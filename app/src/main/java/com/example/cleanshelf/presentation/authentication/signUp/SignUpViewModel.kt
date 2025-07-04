@@ -26,14 +26,27 @@ class SignUpViewModel : ViewModel() {
 
             SignUpEvents.SignUpButtonClicked -> {
                 val current = _signUpState.value
-                val nameError = if (current.username.isBlank()) "Username required" else null
-                val emailError = if (!current.email.contains("@")) "Invalid email" else null
+                val confirmError = if (
+                    current.confirmPassword.isBlank() &&
+                    current.confirmPassword != current.password
+                ) "Password must match" else null
+                val companyEmailRegex = Regex("@[a-zA-Z0-9.-]+\\.com$")
+                val schoolEmailRegex = Regex("@[a-zA-Z0-9.-]+\\.(edu|ac\\.[a-z]{2,})$")
+
+                val emailError = if (
+                    !current.email.endsWith("@gmail.com") &&
+                    !companyEmailRegex.containsMatchIn(current.email) &&
+                    !schoolEmailRegex.containsMatchIn(current.email)
+                ) {
+                    "Use a valid Gmail, company, or school email"
+                } else null
+
                 val passwordError =
                     if (current.password.length < 6) "Password must be at least six characters" else null
 
-                if (nameError != null || emailError != null || passwordError != null) {
+                if (confirmError != null || emailError != null || passwordError != null) {
                     _signUpState.value = _signUpState.value.copy(
-                        usernameErrorMessage = nameError,
+                        confirmPasswordErrorMessage = confirmError,
                         emailErrorMessage = emailError,
                         passwordErrorMessage = passwordError
                     )
@@ -44,7 +57,7 @@ class SignUpViewModel : ViewModel() {
                     auth.signUp(
 
 
-                        _signUpState.value.username,
+                        _signUpState.value.confirmPassword,
                         _signUpState.value.email,
                         _signUpState.value.password,
                         navController
@@ -60,9 +73,9 @@ class SignUpViewModel : ViewModel() {
                 }
             }
 
-            is SignUpEvents.UserNameChanged -> {
+            is SignUpEvents.ConfirmPasswordChanged -> {
                 _signUpState.update {
-                    it.copy(username = events.name)
+                    it.copy(confirmPassword = events.confirmPassword)
                 }
             }
 

@@ -25,6 +25,7 @@ fun CleanShelfTextField(
     value: String = "",
     onValueChange: (String) -> Unit = {},
     placeholder: String = "",
+    placeholderColor: androidx.compose.ui.graphics.Color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
     errorMessage: String? = null,
     color: TextFieldColors = OutlinedTextFieldDefaults.colors(
         focusedBorderColor = MaterialTheme.colorScheme.primary
@@ -42,7 +43,7 @@ fun CleanShelfTextField(
             Text(
                 text = placeholder,
                 style = MaterialTheme.typography.bodyLarge.copy(fontSize = 20.sp),
-                color = MaterialTheme.colorScheme.onBackground.copy(alpha = 0.2f),
+                color = placeholderColor,
             )
         },
         supportingText = {
